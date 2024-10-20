@@ -7,104 +7,88 @@ public class ControlPanel extends JPanel {
     private Color panelColor;
     private int height;
     private int width;
+    private int x;
+    private int y;
 
     public ControlPanel() {
-        this.panelColor = new Color(170, 170, 170);
+        this.panelColor = new Color(0xCDF8C9);
         this.width = 350;
         this.height = 700;
-        initializePanel();
-        setUpButtons();
-    }
-
-    private void initializePanel() {
-        this.setSize(width, height);
+        this.x = 0;
+        this.y = 100;
+        this.setBounds(x, y, width, height);
         this.setBackground(panelColor);
-        this.setLayout(null);
+        setUpLayout();
+        setPreferredSize(new Dimension(350, 700));
+    }
+    
+    private void setUpLayout() {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // using BoxLayout with vertical stacking
+        this.add(Box.createVerticalStrut(10)); // Add spacing above
+
+        add(createCategoryPanel("Essentials", new String[]{"Square Room", "Door", "Window"}, new String[] {
+            "src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"
+        }));//need to add image path for window
+        
+        add(createCategoryPanel("Furniture", new String[] {
+                "Table", "Single Bed", "Double Bed",
+                "Chair", "Cupboard", "Dining Set",
+                "Sofa", "Small Sofa", "Big Sofa",
+                "TV"
+        }, new String[] { //need to add image path for TV
+            "src/main/resources/table.png", "src/main/resources/single-bed.png", "src/main/resources/double-bed.png",
+            "src/main/resources/chair.png", "src/main/resources/cupboard.png", "src/main/resources/diningset.png",
+            "src/main/resources/sofa.png", "src/main/resources/small-sofa.png", "src/main/resources/big-sofa.png",
+            "src/main/resources/room-icon.png"
+        }));
+        
+        add(createCategoryPanel("Fixtures", new String[]{
+                "Bathtub", "Toilet", "Shower",
+                "Wash Basin", "Stove", "Kitchen Sink"
+        }, new String[] { //need to add image path for bathtub
+            "src/main/resources/room-icon.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
+            "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
+        }
+        ));
     }
 
-    private void setUpButtons() {
-        ImageIcon addRoomIcon = new ImageIcon("src/main/resources/room-icon.png");
-        JButton addRoomButton = new JButton(addRoomIcon);
-        addRoomButton.setBounds(50, 50, 60, 60);
-        addRoomButton.addActionListener(e -> System.out.println("Button 1 clicked"));
-        this.add(addRoomButton);
+    private JPanel createCategoryPanel(String category, String[] items, String[] paths) {
+        JPanel categoryPanel = new JPanel();
+        categoryPanel.setLayout(new BorderLayout());
+        categoryPanel.setBackground(panelColor);
 
-        ImageIcon addDoorIcon = new ImageIcon("src/main/resources/door-symbol.png");
-        JButton addDoorButton = new JButton(addDoorIcon);
-        addDoorButton.setBounds(160, 50, 60, 60);
-        addDoorButton.addActionListener(e -> System.out.println("Button 2 clicked"));
-        this.add(addDoorButton);
+        JLabel categoryLabel = new JLabel(category);
+        categoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        categoryLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        categoryPanel.add(categoryLabel, BorderLayout.NORTH);
 
-        //ImageIcon addWindowIcon = new ImageIcon("src/main/resources/window-icon.png");
-        JButton addWindowButton = new JButton("Add Window");
-        addWindowButton.setBounds(270, 50, 60, 60);
-        addWindowButton.addActionListener(e -> System.out.println("Button 3 clicked"));
-        this.add(addWindowButton);
-
-        ImageIcon addTableIcon = new ImageIcon("src/main/resources/table.png");
-        JButton addTableButton = new JButton(addTableIcon);
-        addTableButton.setBounds(50, 160, 60, 60);
-        addTableButton.addActionListener(e -> System.out.println("Button 4 clicked"));
-        this.add(addTableButton);
-
-        ImageIcon addSofaIcon = new ImageIcon("src/main/resources/sofa.png");
-        JButton addSofaButton = new JButton(addSofaIcon);
-        addSofaButton.setBounds(160, 160, 60, 60);
-        addSofaButton.addActionListener(e -> System.out.println("Button 5 clicked"));
-        this.add(addSofaButton);
-
-        ImageIcon addSingleBedIcon = new ImageIcon("src/main/resources/single-bed.png");
-        JButton addSingleBedButton = new JButton(addSingleBedIcon);
-        addSingleBedButton.setBounds(270, 160, 60, 60);
-        addSingleBedButton.addActionListener(e -> System.out.println("Button 6 clicked"));
-        this.add(addSingleBedButton);
-
-        ImageIcon addDoubleBedIcon = new ImageIcon("src/main/resources/double-bed.png");
-        JButton addDoubleBedButton = new JButton(addDoubleBedIcon);
-        addDoubleBedButton.setBounds(50, 270, 60, 60);
-        addDoubleBedButton.addActionListener(e -> System.out.println("Button 7 clicked"));
-        this.add(addDoubleBedButton);
-
-        ImageIcon addChairIcon = new ImageIcon("src/main/resources/chair.png");
-        JButton addChairButton = new JButton(addChairIcon);
-        addChairButton.setBounds(50, 380, 60, 60);
-        addChairButton.addActionListener(e -> System.out.println("Button 8 clicked"));
-        this.add(addChairButton);
-
-        ImageIcon addToiletIcon = new ImageIcon("src/main/resources/toilet.png");
-        JButton addToiletButton = new JButton(addToiletIcon);
-        addToiletButton.setBounds(160, 380, 60, 60);
-        addToiletButton.addActionListener(e -> System.out.println("Button 9 clicked"));
-        this.add(addToiletButton);
-
-        ImageIcon addShowerIcon = new ImageIcon("src/main/resources/shower.png");
-        JButton addShowerButton = new JButton(addShowerIcon);
-        addShowerButton.setBounds(270, 380, 60, 60);
-        addShowerButton.addActionListener(e -> System.out.println("Button 10 clicked"));
-        this.add(addShowerButton);
-
-        ImageIcon addSinkIcon = new ImageIcon("src/main/resources/sink.png");
-        JButton addSinkButton = new JButton(addSinkIcon);
-        addSinkButton.setBounds(50, 490, 60, 60);
-        addSinkButton.addActionListener(e -> System.out.println("Button 11 clicked"));
-        this.add(addSinkButton);
-
-        ImageIcon addStoveIcon = new ImageIcon("src/main/resources/stove.png");
-        JButton addStoveButton = new JButton(addStoveIcon);
-        addStoveButton.setBounds(160, 490, 60, 60);
-        addStoveButton.addActionListener(e -> System.out.println("Button 12 clicked"));
-        this.add(addStoveButton);
-
-        ImageIcon addKitchenSinkIcon = new ImageIcon("src/main/resources/kitchen-sink.png");
-        JButton addKitchenSinkButton = new JButton(addKitchenSinkIcon);
-        addKitchenSinkButton.setBounds(270, 490, 60, 60);
-        addKitchenSinkButton.addActionListener(e -> System.out.println("Button 13 clicked"));
-        this.add(addKitchenSinkButton);
-
-        ImageIcon addCupboardIcon = new ImageIcon("src/main/resources/cupboard.png");
-        JButton addCupboardButton = new JButton(addCupboardIcon);
-        addCupboardButton.setBounds(50, 570, 60, 60);
-        addCupboardButton.addActionListener(e -> System.out.println("Button 14 clicked"));
-        this.add(addCupboardButton);
+        JPanel itemsPanel = new JPanel(new GridLayout(0, 3));
+        itemsPanel.setBackground(panelColor);
+        int itemSize = items.length;
+        for (int i = 0; i < itemSize; i++) {
+            String item = items[i];
+            itemsPanel.add(createButtonWithLabel(item, new ImageIcon("src/main/resources/room-icon.png")));//paths[i]
+        }
+        categoryPanel.add(itemsPanel, BorderLayout.CENTER);
+        return categoryPanel;
     }
-}   
+
+    private JPanel createButtonWithLabel(String item, ImageIcon icon) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setOpaque(false); // Transparent background
+        
+        JButton button = new JButton(icon);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setSize(new Dimension(60, 60));
+        button.addActionListener(e -> System.out.println(item + " button clicked"));
+
+        JLabel label = new JLabel(item, JLabel.CENTER);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        panel.add(button);
+        panel.add(label);
+        return panel;
+    }
+}
