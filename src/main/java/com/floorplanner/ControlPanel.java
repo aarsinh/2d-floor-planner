@@ -1,7 +1,7 @@
 package src.main.java.com.floorplanner;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class ControlPanel extends JPanel {
     private Color panelColor;
@@ -46,7 +46,7 @@ public class ControlPanel extends JPanel {
                 "Bathtub", "Toilet", "Shower",
                 "Wash Basin", "Stove", "Kitchen Sink"
         }, new String[] { //need to add image path for bathtub
-            "src/main/resources/room-icon.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
+            "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
             "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
         }
         ));
@@ -67,7 +67,7 @@ public class ControlPanel extends JPanel {
         int itemSize = items.length;
         for (int i = 0; i < itemSize; i++) {
             String item = items[i];
-            itemsPanel.add(createButtonWithLabel(item, new ImageIcon("src/main/resources/room-icon.png")));//paths[i]
+            itemsPanel.add(createButtonWithLabel(item, new ImageIcon(paths[i])));//paths[i]
         }
         categoryPanel.add(itemsPanel, BorderLayout.CENTER);
         return categoryPanel;
