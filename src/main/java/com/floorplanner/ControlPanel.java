@@ -27,7 +27,7 @@ public class ControlPanel extends JPanel {
         this.add(Box.createVerticalStrut(10)); // Add spacing above
 
         add(createCategoryPanel("Essentials", new String[]{"Square Room", "Door", "Window"}, new String[] {
-            "src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"
+            "src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/window.png"
         }));//need to add image path for window
         
         add(createCategoryPanel("Furniture", new String[] {
