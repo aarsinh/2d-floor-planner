@@ -19,7 +19,7 @@ public class SavePanel extends JPanel {
         this.y = 100;
         initializePanel();
         setUpLayout();
-    }
+    }   
 
     private void initializePanel() {
         this.setBounds(x, y, width, height);
@@ -29,10 +29,10 @@ public class SavePanel extends JPanel {
     }
 
     private void setUpLayout() {
-        add(createButtonWithLabel("Save", new ImageIcon("src/main/resources/room-icon.png"), e -> saveAction()));
-        add(createButtonWithLabel("Undo", new ImageIcon("src/main/resources/room-icon.png"), e -> undo()));
-        add(createButtonWithLabel("Rotate", new ImageIcon("src/main/resources/room-icon.png"), e -> rotate()));
-        add(createButtonWithLabel("Load File", new ImageIcon("src/main/resources/room-icon.png"), e -> loadAction()));
+        add(createButtonWithLabel("Save", new ImageIcon("src/main/resources/save.png"), e -> saveAction()));
+        add(createButtonWithLabel("Undo", new ImageIcon("src/main/resources/undo.png"), e -> undo()));
+        add(createButtonWithLabel("Rotate", new ImageIcon("src/main/resources/rotate.png"), e -> rotate()));
+        add(createButtonWithLabel("Load File", new ImageIcon("src/main/resources/load.png"), e -> loadAction()));
     }
 
     private JPanel createButtonWithLabel(String item, ImageIcon icon, ActionListener actionListener) {
