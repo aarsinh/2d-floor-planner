@@ -1,6 +1,8 @@
 package src.main.java.com.floorplanner;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class ControlPanel extends JPanel {
@@ -45,7 +47,7 @@ public class ControlPanel extends JPanel {
         add(createCategoryPanel("Fixtures", new String[]{
                 "Bathtub", "Toilet", "Shower",
                 "Wash Basin", "Stove", "Kitchen Sink"
-        }, new String[] { //need to add image path for bathtub
+        }, new String[] {
             "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
             "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
         }
@@ -83,6 +85,25 @@ public class ControlPanel extends JPanel {
         button.setSize(new Dimension(60, 60));
         button.addActionListener(e -> System.out.println(item + " button clicked"));
 
+        //drag functionality for button images
+        button.setTransferHandler(new TransferHandler("icon") {
+            @Override
+            protected Transferable createTransferable(JComponent c) {
+                return new StringSelection(item);
+            }
+
+            @Override
+            public int getSourceActions(JComponent c) {
+                return COPY;
+            }
+        });
+        button.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                button.getTransferHandler().exportAsDrag(button, e, TransferHandler.COPY);
+            }
+        });
+
         JLabel label = new JLabel(item, JLabel.CENTER);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         label.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -91,4 +112,6 @@ public class ControlPanel extends JPanel {
         panel.add(label);
         return panel;
     }
+
+    
 }
