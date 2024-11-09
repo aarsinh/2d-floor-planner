@@ -1,15 +1,19 @@
 package src.main.java.com.floorplanner;
 
+import javax.sql.rowset.spi.SyncResolver;
+import java.awt.Rectangle;
+
 class OverlapChecker{
 
-    public static boolean checkOverlap(Room room1, Room room2){
-        if (room1.x + room1.width < room2.x || room2.x + room2.width < room1.x){ 
-            return false;
+    //returns true if newRoom overlaps with one of the rooms
+    public static boolean roomOverlap(Room newRoom, int x, int y) {
+        Rectangle newBounds = new Rectangle(x, y, newRoom.getHeight(), newRoom.getWidth());
+        System.out.println("Number of rooms: " + Room.rooms.size());
+        for(Room r : Room.rooms) {
+            if(r != newRoom && r.getBounds().intersects(newBounds)){
+                return true;
+            }
         }
-        if (room1.y + room1.height < room2.y || room2.y + room2.height < room1.y){
-            return false;
-        }
-        return true;
+        return false;
     }
-
 }

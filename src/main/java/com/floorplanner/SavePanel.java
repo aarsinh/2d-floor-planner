@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import javafx.scene.layout.GridPane;
+//import javafx.scene.layout.GridPane;
 
 public class SavePanel extends JPanel {
     private Color panelColor;

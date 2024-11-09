@@ -1,8 +1,6 @@
 package src.main.java.com.floorplanner;
 
 import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 public class ControlPanel extends JPanel {
@@ -11,6 +9,31 @@ public class ControlPanel extends JPanel {
     private int width;
     private int x;
     private int y;
+    public MainPanel mPanel;
+
+    public String[] essentials = new String[]{"Square Room", "Door", "Window"};
+    public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
+
+    public String[] furniture = new String[]{
+            "Table", "Single Bed", "Double Bed",
+            "Chair", "Cupboard", "Dining Set",
+            "Sofa", "Small Sofa", "Big Sofa",
+            "TV"
+    };
+    public String[] furnitureLogos = new String[]{ //need to add image path for TV
+            "src/main/resources/table.png", "src/main/resources/single-bed.png", "src/main/resources/double-bed.png",
+            "src/main/resources/chair.png", "src/main/resources/cupboard.png", "src/main/resources/diningset.png",
+            "src/main/resources/sofa.png", "src/main/resources/small-sofa.png", "src/main/resources/big-sofa.png",
+            "src/main/resources/room-icon.png"
+    };
+    public String[] fixtures = new String[]{
+            "Bathtub", "Toilet", "Shower",
+            "Wash Basin", "Stove", "Kitchen Sink"
+    };
+    public String[] fixturesLogos = new String[]{ //need to add image path for bathtub
+            "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
+            "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
+    };
 
     public ControlPanel() {
         this.panelColor = new Color(0xCDF8C9);
@@ -18,40 +41,20 @@ public class ControlPanel extends JPanel {
         this.height = 700;
         this.x = 0;
         this.y = 100;
+        mPanel = new MainPanel();
         this.setBounds(x, y, width, height);
         this.setBackground(panelColor);
         setUpLayout();
         setPreferredSize(new Dimension(350, 700));
     }
-    
+
     private void setUpLayout() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // using BoxLayout with vertical stacking
         this.add(Box.createVerticalStrut(10)); // Add spacing above
+        this.add(createCategoryPanel("Essentials", essentials, essentialsLogos));//need to add image path for window
+        this.add(createCategoryPanel("Furniture", furniture, furnitureLogos));
+        this.add(createCategoryPanel("Fixtures", fixtures, fixturesLogos));
 
-        add(createCategoryPanel("Essentials", new String[]{"Square Room", "Door", "Window"}, new String[] {
-            "src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/window.png"
-        }));//need to add image path for window
-        
-        add(createCategoryPanel("Furniture", new String[] {
-                "Table", "Single Bed", "Double Bed",
-                "Chair", "Cupboard", "Dining Set",
-                "Sofa", "Small Sofa", "Big Sofa",
-                "TV"
-        }, new String[] { //need to add image path for TV
-            "src/main/resources/table.png", "src/main/resources/single-bed.png", "src/main/resources/double-bed.png",
-            "src/main/resources/chair.png", "src/main/resources/cupboard.png", "src/main/resources/diningset.png",
-            "src/main/resources/sofa.png", "src/main/resources/small-sofa.png", "src/main/resources/big-sofa.png",
-            "src/main/resources/room-icon.png"
-        }));
-        
-        add(createCategoryPanel("Fixtures", new String[]{
-                "Bathtub", "Toilet", "Shower",
-                "Wash Basin", "Stove", "Kitchen Sink"
-        }, new String[] {
-            "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
-            "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
-        }
-        ));
     }
 
     private JPanel createCategoryPanel(String category, String[] items, String[] paths) {
@@ -69,49 +72,39 @@ public class ControlPanel extends JPanel {
         int itemSize = items.length;
         for (int i = 0; i < itemSize; i++) {
             String item = items[i];
-            itemsPanel.add(createButtonWithLabel(item, new ImageIcon(paths[i])));//paths[i]
+            itemsPanel.add(new ButtonLabel(item, new ImageIcon(paths[i])).panel);
+
         }
         categoryPanel.add(itemsPanel, BorderLayout.CENTER);
         return categoryPanel;
     }
 
-    private JPanel createButtonWithLabel(String item, ImageIcon icon) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setOpaque(false); // Transparent background
-        
-        JButton button = new JButton(icon);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setSize(new Dimension(60, 60));
-        button.addActionListener(e -> System.out.println(item + " button clicked"));
+    private class ButtonLabel {
+        private String item;
+        private ImageIcon icon;
+        private JButton button;
+        private JPanel panel;
 
-        //drag functionality for button images
-        button.setTransferHandler(new TransferHandler("icon") {
-            @Override
-            protected Transferable createTransferable(JComponent c) {
-                return new StringSelection(item);
-            }
+        public ButtonLabel(String item, ImageIcon icon) {
+            this.item = item;
+            this.icon = icon;
+            this.panel = new JPanel();
+            this.button = new JButton(icon);
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.setOpaque(false); // Transparent background
+            button.setAlignmentX(Component.CENTER_ALIGNMENT);
+            button.setSize(new Dimension(60, 60));
+            createButtonWithLabel(item, icon, button);
+        }
 
-            @Override
-            public int getSourceActions(JComponent c) {
-                return COPY;
-            }
-        });
-        button.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                button.getTransferHandler().exportAsDrag(button, e, TransferHandler.COPY);
-            }
-        });
-
-        JLabel label = new JLabel(item, JLabel.CENTER);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        label.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        panel.add(button);
-        panel.add(label);
-        return panel;
+        private JPanel createButtonWithLabel(String item, ImageIcon icon, JButton button) {
+            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100));
+            JLabel label = new JLabel(item, JLabel.CENTER);
+            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            label.setFont(new Font("Arial", Font.PLAIN, 14));
+            panel.add(button);
+            panel.add(label);
+            return panel;
+        }
     }
-
-    
 }
