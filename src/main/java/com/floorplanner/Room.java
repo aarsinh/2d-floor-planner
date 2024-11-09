@@ -59,10 +59,16 @@ public class Room extends JPanel {
                 System.out.println("Mouse released");
                 isDragging = false;
                 isResizing = false;
-                if(OverlapChecker.roomOverlap(Room.this, x1, y1)) {
-                    System.out.println("Rooms overlapping");
+                if(OverlapChecker.roomOverlap(Room.this, getX(), getY())) {
+                    JOptionPane.showMessageDialog(null,
+                            "You cannot place overlapping objects.",
+                            "Overlapping Objects",
+                            JOptionPane.WARNING_MESSAGE);
+
+                    setLocation(startX, startY);
                 } else {
-                    System.out.println("Not overlapping");
+                    startX = getX();
+                    startY = getY();
                 }
             }
         });
@@ -101,10 +107,10 @@ public class Room extends JPanel {
         g.drawRect(0, 0, width, height);
     }
 
-    public int getHeight(Room r){
+    public int getHeight(Room r) {
         return r.height;
     }
-    public int getWidth(Room r){
+    public int getWidth(Room r) {
         return r.width;
     }
 }
