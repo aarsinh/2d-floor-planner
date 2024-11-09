@@ -1,4 +1,4 @@
-package src.main.java.com.floorplanner;
+package main.java.com.floorplanner;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
