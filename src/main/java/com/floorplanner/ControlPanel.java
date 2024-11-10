@@ -12,27 +12,27 @@ public class ControlPanel extends JPanel {
     public MainPanel mPanel;
 
     public String[] essentials = new String[]{"Square Room", "Door", "Window"};
-    public String[] essentialsLogos = new String[] {"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
+    public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
 
-    public String[] furniture = new String[] {
-        "Table", "Single Bed", "Double Bed",
-        "Chair", "Cupboard", "Dining Set",
-        "Sofa", "Small Sofa", "Big Sofa",
-        "TV"
+    public String[] furniture = new String[]{
+            "Table", "Single Bed", "Double Bed",
+            "Chair", "Cupboard", "Dining Set",
+            "Sofa", "Small Sofa", "Big Sofa",
+            "TV"
     };
-    public String[] furnitureLogos = new String[] { //need to add image path for TV
-        "src/main/resources/table.png", "src/main/resources/single-bed.png", "src/main/resources/double-bed.png",
-        "src/main/resources/chair.png", "src/main/resources/cupboard.png", "src/main/resources/diningset.png",
-        "src/main/resources/sofa.png", "src/main/resources/small-sofa.png", "src/main/resources/big-sofa.png",
-        "src/main/resources/room-icon.png"
+    public String[] furnitureLogos = new String[]{ //need to add image path for TV
+            "src/main/resources/table.png", "src/main/resources/single-bed.png", "src/main/resources/double-bed.png",
+            "src/main/resources/chair.png", "src/main/resources/cupboard.png", "src/main/resources/diningset.png",
+            "src/main/resources/sofa.png", "src/main/resources/small-sofa.png", "src/main/resources/big-sofa.png",
+            "src/main/resources/room-icon.png"
     };
     public String[] fixtures = new String[]{
-        "Bathtub", "Toilet", "Shower",
-        "Wash Basin", "Stove", "Kitchen Sink"
+            "Bathtub", "Toilet", "Shower",
+            "Wash Basin", "Stove", "Kitchen Sink"
     };
-    public String[] fixturesLogos = new String[] { //need to add image path for bathtub
-        "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
-        "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
+    public String[] fixturesLogos = new String[]{ //need to add image path for bathtub
+            "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
+            "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
     };
 
     public ControlPanel() {
@@ -47,7 +47,7 @@ public class ControlPanel extends JPanel {
         setUpLayout();
         setPreferredSize(new Dimension(350, 700));
     }
-    
+
     private void setUpLayout() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // using BoxLayout with vertical stacking
         this.add(Box.createVerticalStrut(10)); // Add spacing above
@@ -78,13 +78,14 @@ public class ControlPanel extends JPanel {
         categoryPanel.add(itemsPanel, BorderLayout.CENTER);
         return categoryPanel;
     }
-    private class ButtonLabel{
+
+    private class ButtonLabel {
         private String item;
         private ImageIcon icon;
         private JButton button;
         private JPanel panel;
 
-        public ButtonLabel(String item, ImageIcon icon){
+        public ButtonLabel(String item, ImageIcon icon) {
             this.item = item;
             this.icon = icon;
             this.panel = new JPanel();
@@ -95,8 +96,9 @@ public class ControlPanel extends JPanel {
             button.setSize(new Dimension(60, 60));
             createButtonWithLabel(item, icon, button);
         }
+
         private JPanel createButtonWithLabel(String item, ImageIcon icon, JButton button) {
-            button.addActionListener(e->mPanel.triggerCustomPaint(200, 200, 100, 100));
+            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100));
             JLabel label = new JLabel(item, JLabel.CENTER);
             label.setAlignmentX(Component.CENTER_ALIGNMENT);
             label.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -105,5 +107,4 @@ public class ControlPanel extends JPanel {
             return panel;
         }
     }
-
 }

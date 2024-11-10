@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+//import javafx.scene.layout.GridPane;
+
 public class SavePanel extends JPanel {
     private Color panelColor;
     private int height;
@@ -13,26 +15,26 @@ public class SavePanel extends JPanel {
 
     public SavePanel() {
         this.panelColor = new Color(0xD9D9D9);
-        this.width = 350;
+        this.width = 200;
         this.height = 700;
-        this.x = 0;
-        this.y = 100;
+        this.x = 1000;
+        this.y = 200;
         initializePanel();
         setUpLayout();
-    }
+    }   
 
     private void initializePanel() {
         this.setBounds(x, y, width, height);
         this.setBackground(panelColor);
         this.setLayout(new GridLayout(4, 0));
-        this.setPreferredSize(new Dimension(200, 700));
+        this.setPreferredSize(new Dimension(200, 400));
     }
 
     private void setUpLayout() {
-        add(createButtonWithLabel("Save", new ImageIcon("src/main/resources/room-icon.png"), e -> saveAction()));
-        add(createButtonWithLabel("Undo", new ImageIcon("src/main/resources/room-icon.png"), e -> undo()));
-        add(createButtonWithLabel("Rotate", new ImageIcon("src/main/resources/room-icon.png"), e -> rotate()));
-        add(createButtonWithLabel("Load File", new ImageIcon("src/main/resources/room-icon.png"), e -> loadAction()));
+        add(createButtonWithLabel("Save", new ImageIcon("src/main/resources/save.png"), e -> saveAction()));
+        add(createButtonWithLabel("Undo", new ImageIcon("src/main/resources/undo.png"), e -> undo()));
+        add(createButtonWithLabel("Rotate", new ImageIcon("src/main/resources/rotate.png"), e -> rotate()));
+        add(createButtonWithLabel("Load File", new ImageIcon("src/main/resources/load.png"), e -> loadAction()));
     }
 
     private JPanel createButtonWithLabel(String item, ImageIcon icon, ActionListener actionListener) {

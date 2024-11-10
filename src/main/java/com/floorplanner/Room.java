@@ -12,7 +12,7 @@ public class Room extends JPanel {
     public int y;
     private int width;
     private int height;
-    public static List<Room> rooms;
+    public static List<Room> rooms = new ArrayList<>();
     String type;
     Color color;
     List<Furniture> furnitureList;
@@ -30,13 +30,12 @@ public class Room extends JPanel {
     public Room(int x1, int y1, int width1, int height1) {
         this.x = x1;
         this.y = y1;
-        rooms = new ArrayList<>();
         this.width = width1;
         this.height = height1;
-        
+
         setOpaque(false);
         setBounds(x, y, width + RESIZE_MARGIN, height + RESIZE_MARGIN);
-        
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -46,9 +45,9 @@ public class Room extends JPanel {
                     originalHeight = height;
                     startX = e.getXOnScreen();
                     startY = e.getYOnScreen();
-                } 
-                else if (e.getX() >= 0 && e.getX() <= width && 
-                    e.getY() >= 0 && e.getY() <= height) {
+                }
+                else if (e.getX() >= 0 && e.getX() <= width &&
+                        e.getY() >= 0 && e.getY() <= height) {
                     isDragging = true;
                     dragOffsetX = e.getX();
                     dragOffsetY = e.getY();
@@ -57,9 +56,20 @@ public class Room extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                System.out.println("Mouse released");
                 isDragging = false;
                 isResizing = false;
-            
+                if(OverlapChecker.roomOverlap(Room.this, getX(), getY())) {
+                    JOptionPane.showMessageDialog(null,
+                            "You cannot place overlapping objects.",
+                            "Overlapping Objects",
+                            JOptionPane.WARNING_MESSAGE);
+
+                    setLocation(startX, startY);
+                } else {
+                    startX = getX();
+                    startY = getY();
+                }
             }
         });
 
@@ -69,10 +79,10 @@ public class Room extends JPanel {
                 if (isResizing) {
                     int deltaWidth = e.getXOnScreen() - startX;
                     int deltaHeight = e.getYOnScreen() - startY;
-                    
+
                     width = Math.max(50, originalWidth + deltaWidth);
                     height = Math.max(50, originalHeight + deltaHeight);
-                    
+
                     setBounds(getX(), getY(), width + RESIZE_MARGIN, height + RESIZE_MARGIN);
                     revalidate();
                     repaint();
@@ -86,7 +96,7 @@ public class Room extends JPanel {
     }
 
     private boolean isResizeRegion(int x, int y) {
-        return ((x - width) * (x - width) + 
+        return ((x - width) * (x - width) +
                 (y - height) * (y - height) <= RESIZE_MARGIN * RESIZE_MARGIN);
     }
 
@@ -97,10 +107,10 @@ public class Room extends JPanel {
         g.drawRect(0, 0, width, height);
     }
 
-    public int getHeight(Room r){
+    public int getHeight(Room r) {
         return r.height;
     }
-    public int getWidth(Room r){
+    public int getWidth(Room r) {
         return r.width;
     }
 }
