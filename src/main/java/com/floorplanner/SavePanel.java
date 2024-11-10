@@ -2,6 +2,8 @@ package src.main.java.com.floorplanner;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.io.*;
 import javax.swing.*;
 
 //import javafx.scene.layout.GridPane;
@@ -12,6 +14,7 @@ public class SavePanel extends JPanel {
     private int width;
     private int x;
     private int y;
+    private MainPanel mainPanel = new MainPanel();
 
     public SavePanel() {
         this.panelColor = new Color(0xD9D9D9);
@@ -60,7 +63,17 @@ public class SavePanel extends JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int response = fileChooser.showSaveDialog(this);
         if(response == JFileChooser.APPROVE_OPTION) {
-            // Save the file
+            File fileToSave = fileChooser.getSelectedFile();
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileToSave))) {
+                oos.writeObject(CanvasElement.elements);
+                JOptionPane.showMessageDialog(this, "Plan saved successfully.");
+            } catch(IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Error saving the plan.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -68,7 +81,15 @@ public class SavePanel extends JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int response = fileChooser.showOpenDialog(this);
         if(response == JFileChooser.APPROVE_OPTION) {
-            // Load the file
+            // LOADING WORKS BUT REPAINTING OF MAINPANEL IS NOT WORKING
+            File fileToLoad = fileChooser.getSelectedFile();
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileToLoad))) {
+                CanvasElement.elements = (List<CanvasElement>) ois.readObject();
+                System.out.println(CanvasElement.elements);
+//                mainPanel.reloadElements();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

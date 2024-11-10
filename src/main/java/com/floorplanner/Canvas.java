@@ -7,7 +7,7 @@ class Canvas extends JFrame {
     private ControlPanel controlPanel;
     private SavePanel savePanel;
     public Canvas() {
-        setTitle("2D Floor Planer");
+        setTitle("2D Floor Planner");
         this.controlPanel = new ControlPanel();
         this.savePanel = new SavePanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

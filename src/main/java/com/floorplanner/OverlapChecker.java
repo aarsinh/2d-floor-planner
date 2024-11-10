@@ -2,14 +2,15 @@ package src.main.java.com.floorplanner;
 
 import javax.sql.rowset.spi.SyncResolver;
 import java.awt.Rectangle;
+import java.lang.annotation.ElementType;
 
 class OverlapChecker{
 
     //returns true if newRoom overlaps with one of the rooms
-    public static boolean roomOverlap(Room newRoom, int x, int y) {
-        Rectangle newBounds = new Rectangle(x, y, newRoom.getHeight(), newRoom.getWidth());
-        for(Room r : Room.rooms) {
-            if(r != newRoom && r.getBounds().intersects(newBounds)){
+    public static boolean roomOverlap(CanvasElement newElement, int x, int y) {
+        Rectangle newBounds = new Rectangle(x, y, newElement.getHeight(), newElement.getWidth());
+        for(CanvasElement e : CanvasElement.elements) {
+            if(e != newElement && e.getBounds().intersects(newBounds)){
                 return true;
             }
         }
