@@ -1,4 +1,4 @@
-package main.java.com.floorplanner;
+package src.main.java.com.floorplanner;
 
 import java.awt.*;
 import javax.swing.*;
@@ -106,21 +106,4 @@ public class ControlPanel extends JPanel {
         }
     }
 
-    // private JPanel createButtonWithLabel(String item, ImageIcon icon) {
-    //     JPanel panel = new JPanel();
-    //     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    //     panel.setOpaque(false); // Transparent background
-        
-    //     JButton button = new JButton(icon);
-    //     button.setAlignmentX(Component.CENTER_ALIGNMENT);
-    //     button.setSize(new Dimension(60, 60));
-    //     button.addActionListener(e -> System.out.println(item + " button clicked"));
-    //     JLabel label = new JLabel(item, JLabel.CENTER);
-    //     label.setAlignmentX(Component.CENTER_ALIGNMENT);
-    //     label.setFont(new Font("Arial", Font.PLAIN, 14));
-
-    //     panel.add(button);
-    //     panel.add(label);
-    //     return panel;
-    // }
 }

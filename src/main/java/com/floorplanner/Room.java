@@ -1,4 +1,4 @@
-package main.java.com.floorplanner;
+package src.main.java.com.floorplanner;
 
 import java.awt.Color;
 import java.awt.Graphics;

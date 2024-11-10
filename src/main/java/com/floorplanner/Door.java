@@ -1,4 +1,4 @@
-package main.java.com.floorplanner;
+package src.main.java.com.floorplanner;
 
 class Door {
     int x;
