@@ -35,7 +35,8 @@ public class Room extends JPanel {
 
         setOpaque(false);
         setBounds(x, y, width + RESIZE_MARGIN, height + RESIZE_MARGIN);
-
+        startX = getX();
+        startY = getY();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -56,7 +57,6 @@ public class Room extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("Mouse released");
                 isDragging = false;
                 isResizing = false;
                 if(OverlapChecker.roomOverlap(Room.this, getX(), getY())) {

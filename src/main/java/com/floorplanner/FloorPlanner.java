@@ -4,4 +4,5 @@ public class FloorPlanner {
     public static void main(String[] args) {
         Canvas canvas = new Canvas();
     }
+
 }
