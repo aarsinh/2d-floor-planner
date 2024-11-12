@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.*;
 
-class CanvasElement extends JPanel implements Serializable {
+class CanvasElement extends JPanel {
     private int x, y, width, height;
     private boolean isDragging = false;
     private boolean isResizing = false;
@@ -27,8 +27,8 @@ class CanvasElement extends JPanel implements Serializable {
 
         setOpaque(false);
         setBounds(x, y, width + RESIZE_MARGIN, height + RESIZE_MARGIN);
-        this.startX = getX();
-        this.startY = getY();
+        startX = getX();
+        startY = getY();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -115,6 +115,6 @@ class CanvasElement extends JPanel implements Serializable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.RED);
-        g.drawRect(0, 0, width, height);
+        g.drawRect(0, 0, width - 1, height - 1);
     }
 }

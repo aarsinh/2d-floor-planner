@@ -98,6 +98,6 @@ public class SavePanel extends JPanel {
     }
 
     void undo() {
-        // Undo action
+        mainPanel.undo();
     }   
 }

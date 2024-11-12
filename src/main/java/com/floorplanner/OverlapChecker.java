@@ -11,6 +11,7 @@ class OverlapChecker{
         Rectangle newBounds = new Rectangle(x, y, newElement.getHeight(), newElement.getWidth());
         for(CanvasElement e : CanvasElement.elements) {
             if(e != newElement && e.getBounds().intersects(newBounds)){
+                System.out.println();
                 return true;
             }
         }
