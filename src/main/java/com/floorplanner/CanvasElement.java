@@ -4,8 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.event.*;
+import java.util.Map;
 
 class CanvasElement extends JPanel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -19,8 +21,32 @@ class CanvasElement extends JPanel implements Serializable {
     private int startX, startY;
 
     private String iconPath;
+    private transient ImageIcon icon;
     static List<CanvasElement> elements = new ArrayList<>();
     static List<Room> rooms = new ArrayList<>();
+
+    private static final Map<String, String> typeToIconPath = new HashMap<>();
+
+    static {
+        typeToIconPath.put("Door", "src/main/resources/door-symbol.png");
+        typeToIconPath.put("Window", "src/main/resources/window.png");
+        typeToIconPath.put("Table", "src/main/resources/table.png");
+        typeToIconPath.put("Single Bed", "src/main/resources/single-bed.png");
+        typeToIconPath.put("Double Bed", "src/main/resources/double-bed.png");
+        typeToIconPath.put("Chair", "src/main/resources/chair.png");
+        typeToIconPath.put("Cupboard", "src/main/resources/cupboard.png");
+        typeToIconPath.put("Dining Set", "src/main/resources/diningset.png");
+        typeToIconPath.put("Sofa", "src/main/resources/sofa.png");
+        typeToIconPath.put("Small Sofa", "src/main/resources/small-sofa.png");
+        typeToIconPath.put("Big Sofa", "src/main/resources/big-sofa.png");
+        typeToIconPath.put("Bathtub", "src/main/resources/bathtub.png");
+        typeToIconPath.put("Toilet", "src/main/resources/toilet.png");
+        typeToIconPath.put("Shower", "src/main/resources/shower.png");
+        typeToIconPath.put("Sink", "src/main/resources/sink.png");
+        typeToIconPath.put("Stove", "src/main/resources/stove.png");
+        typeToIconPath.put("Kitchen Sink", "src/main/resources/kitchen-sink.png");
+        typeToIconPath.put("TV", "src/main/resources/tv.png");
+    }
 
     public CanvasElement(int x1, int y1, int h, int w, String type) {
         this.x = x1;
@@ -29,6 +55,7 @@ class CanvasElement extends JPanel implements Serializable {
         this.width = w;
         this.type = type;
         setOpaque(false);
+        setIcon(type);
         setBounds(x, y, width + RESIZE_MARGIN, height + RESIZE_MARGIN);
         startX = getX();
         startY = getY();
@@ -90,8 +117,9 @@ class CanvasElement extends JPanel implements Serializable {
         });
     }
 
-    public void setIconPath(String iconPath) {
-        this.iconPath = iconPath;
+    private void setIcon(String type) {
+        this.iconPath = typeToIconPath.get(type);
+        this.icon = new ImageIcon(iconPath);
     }
 
     public int getElemX() { return x; }
@@ -110,8 +138,14 @@ class CanvasElement extends JPanel implements Serializable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(Color.RED);
-        g.drawRect(0, 0, width - 1, height - 1);
+        if(icon != null) {
+            icon.paintIcon(this, g, 0, 0);
+        } else {
+            super.paintComponent(g);
+            g.setColor(Color.RED);
+            g.drawRect(0, 0, width - 1, height - 1);
+        }
     }
+
+
 }

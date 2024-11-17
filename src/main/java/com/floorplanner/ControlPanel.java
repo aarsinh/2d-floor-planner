@@ -32,7 +32,7 @@ public class ControlPanel extends JPanel {
     };
     public String[] fixtures = new String[]{
             "Bathtub", "Toilet", "Shower",
-            "Wash Basin", "Stove", "Kitchen Sink"
+            "Sink", "Stove", "Kitchen Sink"
     };
     public String[] fixturesLogos = new String[]{ //need to add image path for bathtub
             "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
@@ -127,7 +127,7 @@ public class ControlPanel extends JPanel {
         }
 
         private JPanel createButtonWithLabel(String item, ImageIcon icon, JButton button) {
-            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100));
+            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100, item));
             JLabel label = new JLabel(item, JLabel.CENTER);
             label.setAlignmentX(Component.CENTER_ALIGNMENT);
             label.setFont(new Font("Arial", Font.PLAIN, 14));

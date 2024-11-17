@@ -22,7 +22,7 @@ public class MainPanel extends JPanel {
     private File currentFile;
 
     public MainPanel(){
-        this.MpanelColor = new Color(0,0,204);
+        this.MpanelColor = new Color(0x9C504E);
         setBackground(MpanelColor);
         setLayout(null);
 
@@ -33,7 +33,7 @@ public class MainPanel extends JPanel {
                    String droppedItem = (String) event.getTransferable().getTransferData(DataFlavor.stringFlavor);
                    int dropX = event.getLocation().x;
                    int dropY = event.getLocation().y;
-                   triggerCustomPaint(dropX, dropY, 100, 100);
+                   triggerCustomPaint(dropX, dropY, 100, 100, droppedItem);
                } catch (Exception ex) {
                    ex.printStackTrace();
                }
@@ -41,8 +41,8 @@ public class MainPanel extends JPanel {
         });
     }
 
-    public void triggerCustomPaint(int a, int b, int w, int h) {
-        CanvasElement currentRoom = new CanvasElement(a, b, h, w, "room"); // Position it at (50, 50) with a width and height of 200.
+    public void triggerCustomPaint(int a, int b, int w, int h, String type) {
+        CanvasElement currentRoom = new CanvasElement(a, b, h, w, type); // Position it at (50, 50) with a width and height of 200.
         if(OverlapChecker.roomOverlap(currentRoom, a, b)){
             JOptionPane.showMessageDialog(MainPanel.this,
                     "You cannot place overlapping objects.",
@@ -74,8 +74,6 @@ public class MainPanel extends JPanel {
                         CanvasElement.elements.add(element);
                         JLabel label = new JLabel(getIconForItem(element.getType()));
                         label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
-                        label.setOpaque(true);
-                        label.setBackground(Color.RED);
 
                         // Add the element to the panel
                         this.add(label);
