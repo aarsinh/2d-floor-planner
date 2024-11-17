@@ -28,6 +28,7 @@ class CanvasElement extends JPanel implements Serializable {
     private static final Map<String, String> typeToIconPath = new HashMap<>();
 
     static {
+        typeToIconPath.put("Square Room", null);
         typeToIconPath.put("Door", "src/main/resources/door-symbol.png");
         typeToIconPath.put("Window", "src/main/resources/window.png");
         typeToIconPath.put("Table", "src/main/resources/table.png");
@@ -119,7 +120,9 @@ class CanvasElement extends JPanel implements Serializable {
 
     private void setIcon(String type) {
         this.iconPath = typeToIconPath.get(type);
-        this.icon = new ImageIcon(iconPath);
+        if(iconPath != null) {
+            this.icon = new ImageIcon(iconPath);
+        }
     }
 
     public int getElemX() { return x; }
@@ -142,7 +145,7 @@ class CanvasElement extends JPanel implements Serializable {
             icon.paintIcon(this, g, 0, 0);
         } else {
             super.paintComponent(g);
-            g.setColor(Color.RED);
+            g.setColor(Color.BLUE);
             g.drawRect(0, 0, width - 1, height - 1);
         }
     }
