@@ -30,7 +30,7 @@ public class SavePanel extends JPanel {
     private void initializePanel() {
         this.setBounds(x, y, width, height);
         this.setBackground(panelColor);
-        this.setLayout(new GridLayout(4, 0));
+        this.setLayout(new GridLayout(3, 0));
         this.setPreferredSize(new Dimension(200, 400));
     }
 

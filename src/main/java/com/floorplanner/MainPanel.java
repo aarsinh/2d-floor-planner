@@ -22,7 +22,7 @@ public class MainPanel extends JPanel {
     private File currentFile;
 
     public MainPanel(){
-        this.MpanelColor = new Color(0x9C504E);
+        this.MpanelColor = new Color(0xFFFBFB);
         setBackground(MpanelColor);
         setLayout(null);
 
