@@ -1,6 +1,9 @@
 package src.main.java.com.floorplanner;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import javax.swing.*;
 
 public class ControlPanel extends JPanel {
@@ -10,6 +13,7 @@ public class ControlPanel extends JPanel {
     private int x;
     private int y;
     public MainPanel mPanel;
+    private boolean isMousePressed = false;
 
     public String[] essentials = new String[]{"Square Room", "Door", "Window"};
     public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
@@ -28,7 +32,7 @@ public class ControlPanel extends JPanel {
     };
     public String[] fixtures = new String[]{
             "Bathtub", "Toilet", "Shower",
-            "Wash Basin", "Stove", "Kitchen Sink"
+            "Sink", "Stove", "Kitchen Sink"
     };
     public String[] fixturesLogos = new String[]{ //need to add image path for bathtub
             "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
@@ -95,10 +99,35 @@ public class ControlPanel extends JPanel {
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
             button.setSize(new Dimension(60, 60));
             createButtonWithLabel(item, icon, button);
+
+            // Transfer Handle Action
+            button.setTransferHandler(new ElementTransferHandler(item));
+            button.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    isMousePressed = true;
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    isMousePressed = false;
+                }
+            });
+
+            button.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    if(isMousePressed) {
+                        JComponent comp = (JComponent) e.getSource();
+                        TransferHandler handler = comp.getTransferHandler();
+                        handler.exportAsDrag(comp, e, TransferHandler.COPY);
+                    }
+                }
+            });
         }
 
         private JPanel createButtonWithLabel(String item, ImageIcon icon, JButton button) {
-            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100));
+            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100, item));
             JLabel label = new JLabel(item, JLabel.CENTER);
             label.setAlignmentX(Component.CENTER_ALIGNMENT);
             label.setFont(new Font("Arial", Font.PLAIN, 14));
