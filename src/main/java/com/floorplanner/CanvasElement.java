@@ -28,7 +28,7 @@ class CanvasElement extends JPanel implements Serializable {
     private static final Map<String, String> typeToIconPath = new HashMap<>();
 
     static {
-        typeToIconPath.put("Square Room", null);
+        typeToIconPath.put("Room", null);
         typeToIconPath.put("Door", "src/main/resources/door-symbol.png");
         typeToIconPath.put("Window", "src/main/resources/window.png");
         typeToIconPath.put("Table", "src/main/resources/table.png");
@@ -84,7 +84,7 @@ class CanvasElement extends JPanel implements Serializable {
             public void mouseReleased(MouseEvent e) {
                 isDragging = false;
                 isResizing = false;
-                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY())) {
+                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type)) {
                     JOptionPane.showMessageDialog(null,
                             "You cannot place overlapping objects.",
                             "Overlapping Objects",
@@ -141,14 +141,25 @@ class CanvasElement extends JPanel implements Serializable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        if(icon != null) {
+        if (icon != null) {
             icon.paintIcon(this, g, 0, 0);
         } else {
             super.paintComponent(g);
-            g.setColor(Color.BLUE);
-            g.drawRect(0, 0, width - 1, height - 1);
+
+            // Cast to Graphics2D for advanced features
+            Graphics2D g2d = (Graphics2D) g;
+
+            // Draw the main blue rectangle border
+            g2d.setColor(Color.BLUE);
+            g2d.drawRect(0, 0, width - 1, height - 1);
+
+            // Add a thicker or secondary border
+            g2d.setStroke(new BasicStroke(3)); // Set thickness to 3 pixels
+            g2d.setColor(Color.DARK_GRAY); // Set a secondary border color
+            g2d.drawRect(1, 1, width - 3, height - 3); // Inset by 1 pixel
         }
     }
+
 
 
 }

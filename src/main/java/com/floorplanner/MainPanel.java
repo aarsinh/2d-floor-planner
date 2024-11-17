@@ -10,6 +10,7 @@ import java.io.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
 import javax.swing.*;
 
@@ -42,17 +43,22 @@ public class MainPanel extends JPanel {
     }
 
     public void triggerCustomPaint(int a, int b, int w, int h, String type) {
-        CanvasElement currentRoom = new CanvasElement(a, b, h, w, type); // Position it at (50, 50) with a width and height of 200.
-        if(OverlapChecker.roomOverlap(currentRoom, a, b)){
+        CanvasElement newElement = type.equals("Room") ?
+                new Room(a, b, w, h, type) :
+                new CanvasElement(a, b, w , h, type);
+
+        if(OverlapChecker.roomOverlap(newElement, a, b, type)){
             JOptionPane.showMessageDialog(MainPanel.this,
                     "You cannot place overlapping objects.",
                     "Overlapping Objects",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-            CanvasElement.elements.add(currentRoom);
-            Canvas.undoStack.push(currentRoom);
-            System.out.println("DEBUG: Undo stack: " + Canvas.undoStack);
-            this.add(currentRoom);
+            if(newElement instanceof Room) {
+                CanvasElement.rooms.add((Room) newElement);
+            } else {
+                CanvasElement.elements.add(newElement);
+            }
+            this.add(newElement);
         }
         this.revalidate();
         this.repaint();
