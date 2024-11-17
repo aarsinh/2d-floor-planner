@@ -2,6 +2,7 @@ package src.main.java.com.floorplanner;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import javax.swing.*;
@@ -35,7 +36,6 @@ public class SavePanel extends JPanel {
 
     private void setUpLayout() {
         add(createButtonWithLabel("Save", new ImageIcon("src/main/resources/save.png"), e -> saveAction()));
-        add(createButtonWithLabel("Undo", new ImageIcon("src/main/resources/undo.png"), e -> undo()));
         add(createButtonWithLabel("Rotate", new ImageIcon("src/main/resources/rotate.png"), e -> rotate()));
         add(createButtonWithLabel("Load File", new ImageIcon("src/main/resources/load.png"), e -> loadAction()));
     }
@@ -62,17 +62,39 @@ public class SavePanel extends JPanel {
     void saveAction() {
         JFileChooser fileChooser = new JFileChooser();
         int response = fileChooser.showSaveDialog(this);
-        if(response == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileToSave))) {
-                oos.writeObject(CanvasElement.elements);
-                JOptionPane.showMessageDialog(this, "Plan saved successfully.");
-            } catch(IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this,
-                        "Error saving the plan.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            // Get the file chosen by the user
+            File file = fileChooser.getSelectedFile();
+            // Check if the file exists and load existing elements if necessary
+            List<CanvasElement> savedElementsList = new ArrayList<>();
+            if (file.exists()) {
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                    Object obj = ois.readObject();
+                    if (obj instanceof List<?>) {
+                        savedElementsList = (List<CanvasElement>) obj;
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    JOptionPane.showMessageDialog(this, "Failed to load existing elements.", "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                    return; // Exit the method if loading fails
+                }
+            }
+            // Add new elements to the list
+            List<CanvasElement> newElements = CanvasElement.elements; // Assuming this method returns new elements
+            savedElementsList.addAll(newElements); // Append new elements to the existing list
+            // Save the updated list back to the file
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+                if (savedElementsList.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No elements to save.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    oos.writeObject(savedElementsList);
+                    JOptionPane.showMessageDialog(this, "Layout saved successfully!");
+                    System.out.println("File size in bytes: " + file.length());
+                    System.out.println(String.format("Saved %d elements to file.", savedElementsList.size()));
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Failed to save layout.", "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
         }
     }
@@ -80,24 +102,13 @@ public class SavePanel extends JPanel {
     void loadAction() {
         JFileChooser fileChooser = new JFileChooser();
         int response = fileChooser.showOpenDialog(this);
-        if(response == JFileChooser.APPROVE_OPTION) {
-            // LOADING WORKS BUT REPAINTING OF MAINPANEL IS NOT WORKING
-            File fileToLoad = fileChooser.getSelectedFile();
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileToLoad))) {
-                CanvasElement.elements = (List<CanvasElement>) ois.readObject();
-                System.out.println(CanvasElement.elements);
-//                mainPanel.reloadElements();
-            } catch (IOException | ClassNotFoundException ex) {
-                ex.printStackTrace();
-            }
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            mainPanel.loadElementsFromFile(file.getAbsolutePath());
         }
     }
 
     void rotate() {
         // Rotate action
     }
-
-    void undo() {
-        mainPanel.undo();
-    }   
 }

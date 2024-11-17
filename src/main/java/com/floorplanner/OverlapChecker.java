@@ -8,10 +8,9 @@ class OverlapChecker{
 
     //returns true if newRoom overlaps with one of the rooms
     public static boolean roomOverlap(CanvasElement newElement, int x, int y) {
-        Rectangle newBounds = new Rectangle(x, y, newElement.getHeight(), newElement.getWidth());
+        Rectangle newBounds = new Rectangle(x, y, newElement.getWidth(), newElement.getHeight());
         for(CanvasElement e : CanvasElement.elements) {
             if(e != newElement && e.getBounds().intersects(newBounds)){
-                System.out.println();
                 return true;
             }
         }

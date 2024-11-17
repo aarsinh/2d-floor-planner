@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.*;
 
-class CanvasElement extends JPanel {
+class CanvasElement extends JPanel implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int x, y, width, height;
+    private String type;
     private boolean isDragging = false;
     private boolean isResizing = false;
     private int dragOffsetX, dragOffsetY;
@@ -18,13 +20,14 @@ class CanvasElement extends JPanel {
 
     private String iconPath;
     static List<CanvasElement> elements = new ArrayList<>();
+    static List<Room> rooms = new ArrayList<>();
 
-    public CanvasElement(int x1, int y1, int h, int w) {
+    public CanvasElement(int x1, int y1, int h, int w, String type) {
         this.x = x1;
         this.y = y1;
         this.height = h;
         this.width = w;
-
+        this.type = type;
         setOpaque(false);
         setBounds(x, y, width + RESIZE_MARGIN, height + RESIZE_MARGIN);
         startX = getX();
@@ -38,6 +41,8 @@ class CanvasElement extends JPanel {
                     originalHeight = height;
                     startX = e.getXOnScreen();
                     startY = e.getYOnScreen();
+                    System.out.println(startX);
+                    System.out.println(startY);
                 }
                 else if (e.getX() >= 0 && e.getX() <= width &&
                         e.getY() >= 0 && e.getY() <= height) {
@@ -73,7 +78,6 @@ class CanvasElement extends JPanel {
 
                     width = Math.max(50, originalWidth + deltaWidth);
                     height = Math.max(50, originalHeight + deltaHeight);
-
                     setBounds(getX(), getY(), width + RESIZE_MARGIN, height + RESIZE_MARGIN);
                     revalidate();
                     repaint();
@@ -90,22 +94,15 @@ class CanvasElement extends JPanel {
         this.iconPath = iconPath;
     }
 
-    public int getElemX() {
-        return x;
-    }
+    public int getElemX() { return x; }
 
-    public int getElemY() {
-        return y;
-    }
+    public int getElemY() { return y; }
 
-    public int getHeight() {
-        return height;
-    }
+    public int getHeight() { return height; }
 
-    public int getWidth() {
-        return width;
-    }
+    public int getWidth() { return width; }
 
+    public String getType() { return type; }
     private boolean isResizeRegion(int x, int y) {
         return ((x - width) * (x - width) +
                 (y - height) * (y - height) <= RESIZE_MARGIN * RESIZE_MARGIN);

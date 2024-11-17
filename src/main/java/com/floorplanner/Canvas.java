@@ -1,10 +1,12 @@
 package src.main.java.com.floorplanner;
 import java.awt.*;
+import java.util.Stack;
 import javax.swing.*;
 
 
 class Canvas extends JFrame {
     private ControlPanel controlPanel;
+    public static Stack<CanvasElement> undoStack = new Stack<>();
     private SavePanel savePanel;
     public Canvas() {
         setTitle("2D Floor Planner");
