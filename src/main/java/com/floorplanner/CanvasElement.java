@@ -126,8 +126,10 @@ class CanvasElement extends JPanel implements Serializable {
     }
 
     public int getElemX() { return x; }
+    public void setElemX(int x) { this.x = x; }
 
     public int getElemY() { return y; }
+    public void setElemY(int y) { this.y = y; }
 
     public int getHeight() { return height; }
 

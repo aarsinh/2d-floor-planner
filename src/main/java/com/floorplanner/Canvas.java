@@ -8,10 +8,11 @@ class Canvas extends JFrame {
     private ControlPanel controlPanel;
     public static Stack<CanvasElement> undoStack = new Stack<>();
     private SavePanel savePanel;
+
     public Canvas() {
         setTitle("2D Floor Planner");
         this.controlPanel = new ControlPanel();
-        this.savePanel = new SavePanel();
+        this.savePanel = new SavePanel(controlPanel.mPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         add(controlPanel, BorderLayout.WEST);

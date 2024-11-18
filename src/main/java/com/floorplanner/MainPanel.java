@@ -42,6 +42,9 @@ public class MainPanel extends JPanel {
         });
     }
 
+    public File getCurrentFile() { return currentFile; }
+
+
     public void triggerCustomPaint(int a, int b, int w, int h, String type) {
         CanvasElement newElement = type.equals("Room") ?
                 new Room(a, b, w, h, type) :
@@ -58,13 +61,44 @@ public class MainPanel extends JPanel {
             } else {
                 CanvasElement.elements.add(newElement);
             }
-            this.add(newElement);
+            setUpElement(newElement);
         }
+    }
+
+    private void setUpElement(CanvasElement element) {
+        ImageIcon icon = getIconForItem(element.getType());
+        JLabel label = new JLabel(icon);
+        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+        
+        // Add interactivity to label
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Element clicked: " + element);
+            }
+        });
+
+        label.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int newX = e.getX() + label.getX();
+                int newY = e.getY() + label.getY();
+                label.setLocation(newX, newY);
+                element.setElemX(newX);  // Update the CanvasElement position
+                element.setElemY(newY);  // Update the CanvasElement position
+                repaint();
+            }
+        });
+        // Add element to the panel
+        this.add(label);
         this.revalidate();
         this.repaint();
     }
 
     public void loadElementsFromFile(String filename) {
+        File file = new File(filename);
+        this.currentFile = file;
+
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             Object obj = ois.readObject();
             if (obj instanceof List<?>) {
@@ -73,39 +107,21 @@ public class MainPanel extends JPanel {
                     System.out.println("No elements found in the file.");
                 } else {
                     System.out.println("Loaded " + elementsList.size() + " elements from file.");
+                    
                     this.removeAll(); // Clear existing components
                     CanvasElement.elements.clear();
+                    
                     for (CanvasElement element : elementsList) {
                         // Create label or component for the element
-                        CanvasElement.elements.add(element);
-                        JLabel label = new JLabel(getIconForItem(element.getType()));
-                        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
-
-                        // Add the element to the panel
-                        this.add(label);
-
-                        // Reapply interactivity: add mouse listeners for drag or resize
-                        label.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mousePressed(MouseEvent e) {
-                                // Handle dragging or interaction
-                                System.out.println("Element clicked: " + element);
-                            }
-                        });
-
-                        label.addMouseMotionListener(new MouseAdapter() {
-                            @Override
-                            public void mouseDragged(MouseEvent e) {
-                                // Handle element dragging logic
-                                int newX = e.getX() + label.getX();
-                                int newY = e.getY() + label.getY();
-                                label.setLocation(newX, newY);
-                                repaint();
-                            }
-                        });
+                        // CanvasElement.elements.add(element);
+                        // setUpElement(element);
+                        if (!CanvasElement.elements.contains(element)) { // Avoid adding duplicates
+                            CanvasElement.elements.add(element);
+                            setUpElement(element);
+                        }
                     }
-                    this.revalidate();  // Revalidate layout after adding elements
-                    this.repaint();     // Refresh the panel to reflect changes
+                    this.revalidate();
+                    this.repaint();
                 }
             } else {
                 System.out.println("File content is not a valid list.");

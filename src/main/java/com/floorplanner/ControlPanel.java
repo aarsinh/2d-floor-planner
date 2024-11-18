@@ -34,7 +34,7 @@ public class ControlPanel extends JPanel {
             "Bathtub", "Toilet", "Shower",
             "Sink", "Stove", "Kitchen Sink"
     };
-    public String[] fixturesLogos = new String[]{ //need to add image path for bathtub
+    public String[] fixturesLogos = new String[]{
             "src/main/resources/bathtub.png", "src/main/resources/toilet.png", "src/main/resources/shower.png",
             "src/main/resources/sink.png", "src/main/resources/stove.png", "src/main/resources/kitchen-sink.png"
     };
