@@ -19,10 +19,7 @@ class Canvas extends JFrame {
         add(controlPanel.mPanel, BorderLayout.CENTER);
         add(savePanel, BorderLayout.EAST);
 
-        //m.setLayout(null);
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
-        //this.savePanel = new SavePanel();
     }
 }
