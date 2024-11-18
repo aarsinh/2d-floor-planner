@@ -74,6 +74,11 @@ public class MainPanel extends JPanel {
                 CanvasElement.elements.add(newElement);
             }
             this.add(newElement);
+            if(newElement instanceof Room) {
+                this.setComponentZOrder(newElement, this.getComponentCount() - 1);
+            } else {
+                this.setComponentZOrder(newElement, 0);
+            }
         }
         this.revalidate();
         this.repaint();
