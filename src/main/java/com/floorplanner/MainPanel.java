@@ -22,8 +22,8 @@ public class MainPanel extends JPanel {
     private int y;
     private File currentFile;
 
-    public MainPanel(){
-        this.MpanelColor = new Color(0xFFFBFB);
+    public MainPanel() {
+        this.MpanelColor = new Color(0xD9D9D9);
         setBackground(MpanelColor);
         setLayout(null);
 
@@ -42,9 +42,24 @@ public class MainPanel extends JPanel {
         });
     }
 
+    private Room createNewRoom(int a, int b, int w, int h) {
+        String[] roomTypes = {"Bedroom", "Bathroom", "Kitchen", "Living Room", "Dining Room"};
+        String selectedRoomType = (String) JOptionPane.showInputDialog(
+                this,
+                "Select Room Type: ",
+                "Room Type",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                roomTypes,
+                roomTypes[0]
+        );
+        Room newRoom = new Room(a, b, w, h, "Room", selectedRoomType);
+        return newRoom;
+    }
+
     public void triggerCustomPaint(int a, int b, int w, int h, String type) {
         CanvasElement newElement = type.equals("Room") ?
-                new Room(a, b, w, h, type) :
+                createNewRoom(a, b, w, h) :
                 new CanvasElement(a, b, w , h, type);
 
         if(OverlapChecker.roomOverlap(newElement, a, b, type)){

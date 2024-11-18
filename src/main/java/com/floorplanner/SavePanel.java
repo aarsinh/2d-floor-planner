@@ -18,7 +18,7 @@ public class SavePanel extends JPanel {
     private MainPanel mainPanel = new MainPanel();
 
     public SavePanel() {
-        this.panelColor = new Color(0xD9D9D9);
+        this.panelColor = new Color(0xC4C4C4);
         this.width = 200;
         this.height = 700;
         this.x = 1000;

@@ -143,12 +143,14 @@ class CanvasElement extends JPanel implements Serializable {
     protected void paintComponent(Graphics g) {
         if (icon != null) {
             icon.paintIcon(this, g, 0, 0);
-        } else {
+        } else if (type.equals("Room")) {
             super.paintComponent(g);
-
+            Room room = (Room) this;
             // Cast to Graphics2D for advanced features
             Graphics2D g2d = (Graphics2D) g;
 
+            g2d.setColor(Room.getRoomColor(room.getRoomType()));
+            g2d.fillRect(0, 0 , width, height);
             // Draw the main blue rectangle border
             g2d.setColor(Color.BLUE);
             g2d.drawRect(0, 0, width - 1, height - 1);
