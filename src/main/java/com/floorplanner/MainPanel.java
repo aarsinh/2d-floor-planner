@@ -85,6 +85,8 @@ public class MainPanel extends JPanel {
     }
 
     public void loadElementsFromFile(String filename) {
+        File file = new File(filename);
+        this.currentFile = file;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             Object obj = ois.readObject();
             if (obj instanceof List<?>) {
@@ -96,36 +98,13 @@ public class MainPanel extends JPanel {
                     this.removeAll(); // Clear existing components
                     CanvasElement.elements.clear();
                     for (CanvasElement element : elementsList) {
-                        // Create label or component for the element
-                        CanvasElement.elements.add(element);
-                        JLabel label = new JLabel(getIconForItem(element.getType()));
-                        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
-
-                        // Add the element to the panel
-                        this.add(label);
-
-                        // Reapply interactivity: add mouse listeners for drag or resize
-                        label.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mousePressed(MouseEvent e) {
-                                // Handle dragging or interaction
-                                System.out.println("Element clicked: " + element);
-                            }
-                        });
-
-                        label.addMouseMotionListener(new MouseAdapter() {
-                            @Override
-                            public void mouseDragged(MouseEvent e) {
-                                // Handle element dragging logic
-                                int newX = e.getX() + label.getX();
-                                int newY = e.getY() + label.getY();
-                                label.setLocation(newX, newY);
-                                repaint();
-                            }
-                        });
+                        if (!CanvasElement.elements.contains(element)) {
+                            CanvasElement.elements.add(element);
+                            setupElement(element);
+                        }
                     }
-                    this.revalidate();  // Revalidate layout after adding elements
-                    this.repaint();     // Refresh the panel to reflect changes
+                    this.revalidate();
+                    this.repaint();
                 }
             } else {
                 System.out.println("File content is not a valid list.");
@@ -162,4 +141,35 @@ public class MainPanel extends JPanel {
             default: return null;
         }
     }
+
+    private void setupElement(CanvasElement element) {
+        ImageIcon icon = getIconForItem(element.getType());
+        JLabel label = new JLabel(icon);
+        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+
+        // Add interactivity to label
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Element clicked: " + element);
+            }
+        });
+        label.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int newX = e.getX() + label.getX();
+                int newY = e.getY() + label.getY();
+                label.setLocation(newX, newY);
+                element.setElemX(newX);  // Update the CanvasElement position
+                element.setElemY(newY);  // Update the CanvasElement position
+                repaint();
+            }
+        });
+        // Add element to the panel
+        this.add(label);
+        this.revalidate();
+        this.repaint();
+    }
+
+    public File getCurrentFile() { return currentFile; }
 }

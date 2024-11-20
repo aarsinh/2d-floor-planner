@@ -25,7 +25,7 @@ class CanvasElement extends JPanel implements Serializable {
     static List<CanvasElement> elements = new ArrayList<>();
     static List<Room> rooms = new ArrayList<>();
 
-    private static final Map<String, String> typeToIconPath = new HashMap<>();
+    static final Map<String, String> typeToIconPath = new HashMap<>();
 
     static {
         typeToIconPath.put("Room", null);
@@ -69,8 +69,6 @@ class CanvasElement extends JPanel implements Serializable {
                     originalHeight = height;
                     startX = e.getXOnScreen();
                     startY = e.getYOnScreen();
-                    System.out.println(startX);
-                    System.out.println(startY);
                 }
                 else if (e.getX() >= 0 && e.getX() <= width &&
                         e.getY() >= 0 && e.getY() <= height) {
@@ -139,8 +137,10 @@ class CanvasElement extends JPanel implements Serializable {
     }
 
     public int getElemX() { return x; }
+    public void setElemX(int x) { this.x = x; }
 
     public int getElemY() { return y; }
+    public void setElemY(int y) { this.y = y; }
 
     public int getHeight() { return height; }
 
