@@ -25,7 +25,7 @@ class CanvasElement extends JPanel implements Serializable {
     static List<CanvasElement> elements = new ArrayList<>();
     static List<Room> rooms = new ArrayList<>();
 
-    private static final Map<String, String> typeToIconPath = new HashMap<>();
+    static final Map<String, String> typeToIconPath = new HashMap<>();
 
     static {
         typeToIconPath.put("Room", null);
@@ -69,8 +69,6 @@ class CanvasElement extends JPanel implements Serializable {
                     originalHeight = height;
                     startX = e.getXOnScreen();
                     startY = e.getYOnScreen();
-                    System.out.println(startX);
-                    System.out.println(startY);
                 }
                 else if (e.getX() >= 0 && e.getX() <= width &&
                         e.getY() >= 0 && e.getY() <= height) {
@@ -112,7 +110,20 @@ class CanvasElement extends JPanel implements Serializable {
                 } else if (isDragging) {
                     int newX = getX() + e.getX() - dragOffsetX;
                     int newY = getY() + e.getY() - dragOffsetY;
+                    // delta values give the change in position of the dragged element
+                    int deltaX = newX - getX();
+                    int deltaY = newY - getY();
                     setLocation(newX, newY);
+
+                    // if a room is being dragged, then every element which is inside the room moves by the delta values
+                    if(CanvasElement.this.type.equals("Room")) {
+                        for (CanvasElement el : elements) {
+                            if (el.getBounds().intersects(CanvasElement.this.getBounds())) {
+                                // some bounds issues are there because of the 100*100 of the icons
+                                el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -126,8 +137,10 @@ class CanvasElement extends JPanel implements Serializable {
     }
 
     public int getElemX() { return x; }
+    public void setElemX(int x) { this.x = x; }
 
     public int getElemY() { return y; }
+    public void setElemY(int y) { this.y = y; }
 
     public int getHeight() { return height; }
 
@@ -143,20 +156,19 @@ class CanvasElement extends JPanel implements Serializable {
     protected void paintComponent(Graphics g) {
         if (icon != null) {
             icon.paintIcon(this, g, 0, 0);
-        } else {
+        } else if (type.equals("Room")) {
             super.paintComponent(g);
+            Room room = (Room) this;
 
-            // Cast to Graphics2D for advanced features
             Graphics2D g2d = (Graphics2D) g;
 
-            // Draw the main blue rectangle border
-            g2d.setColor(Color.BLUE);
-            g2d.drawRect(0, 0, width - 1, height - 1);
+            g2d.setColor(Room.getRoomColor(room.getRoomType()));
+            g2d.fillRect(0, 0 , width, height);
 
-            // Add a thicker or secondary border
-            g2d.setStroke(new BasicStroke(3)); // Set thickness to 3 pixels
-            g2d.setColor(Color.DARK_GRAY); // Set a secondary border color
-            g2d.drawRect(1, 1, width - 3, height - 3); // Inset by 1 pixel
+            // Add thicker border
+            g2d.setStroke(new BasicStroke(10)); 
+            g2d.setColor(Color.BLACK); 
+            g2d.drawRect(5, 5, width - 10, height - 10);
         }
     }
 
