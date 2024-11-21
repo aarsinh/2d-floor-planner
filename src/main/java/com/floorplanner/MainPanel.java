@@ -34,7 +34,9 @@ public class MainPanel extends JPanel {
                    String droppedItem = (String) event.getTransferable().getTransferData(DataFlavor.stringFlavor);
                    int dropX = event.getLocation().x;
                    int dropY = event.getLocation().y;
-                   triggerCustomPaint(dropX, dropY, 100, 100, droppedItem);
+                   triggerCustomPaint(dropX, dropY,
+                           ControlPanel.iconToBounds.get(droppedItem)[0], ControlPanel.iconToBounds.get(droppedItem)[1],
+                           droppedItem);
                } catch (Exception ex) {
                    ex.printStackTrace();
                }
@@ -60,7 +62,7 @@ public class MainPanel extends JPanel {
     public void triggerCustomPaint(int a, int b, int w, int h, String type) {
         CanvasElement newElement = type.equals("Room") ?
                 createNewRoom(a, b, w, h) :
-                new CanvasElement(a, b, w , h, type);
+                new CanvasElement(a, b, w, h, type);
 
         if(OverlapChecker.roomOverlap(newElement, a, b, type)){
             JOptionPane.showMessageDialog(MainPanel.this,
