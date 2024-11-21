@@ -20,20 +20,21 @@ public class ControlPanel extends JPanel {
     static Map<String, int[]> iconToBounds = new HashMap<>();
 
     static {
-        iconToBounds.put("Table", new int[]{54, 30});
-        iconToBounds.put("Single Bed", new int[]{30, 55});
+        iconToBounds.put("Room", new int[]{100,100});
+        iconToBounds.put("Table", new int[]{54, 31});
+        iconToBounds.put("Single Bed", new int[]{29, 54});
         iconToBounds.put("Double Bed", new int[]{46, 55});
-        iconToBounds.put("Chair", new int[]{48, 47});
-        iconToBounds.put("Cupboard", new int[]{46, 26});
+        iconToBounds.put("Chair", new int[]{46, 46});
+        iconToBounds.put("Cupboard", new int[]{46, 27});
         iconToBounds.put("Dining Set", new int[]{41, 41});
         iconToBounds.put("Sofa", new int[]{50, 28});
-        iconToBounds.put("Small Sofa", new int[]{46, 39});
-        iconToBounds.put("Big Sofa", new int[]{48, 33});
-        iconToBounds.put("Bathtub", new int[]{26, 48});
-        iconToBounds.put("Toilet", new int[]{34, 50});
-        iconToBounds.put("Shower", new int[]{57, 58});
+        iconToBounds.put("Small Sofa", new int[]{47, 38});
+        iconToBounds.put("Big Sofa", new int[]{47, 33});
+        iconToBounds.put("Bathtub", new int[]{27, 48});
+        iconToBounds.put("Toilet", new int[]{32, 50});
+        iconToBounds.put("Shower", new int[]{59, 58});
         iconToBounds.put("Sink", new int[]{54, 36});
-        iconToBounds.put("Stove", new int[]{58, 58});
+        iconToBounds.put("Stove", new int[]{59, 59});
         iconToBounds.put("Kitchen Sink", new int[]{60, 34});
         iconToBounds.put("TV", new int[]{0, 0}); // Default size
     }
@@ -150,7 +151,8 @@ public class ControlPanel extends JPanel {
         }
 
         private JPanel createButtonWithLabel(String item, ImageIcon icon, JButton button) {
-            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, 100, 100, item));
+        
+            button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, iconToBounds.get(item)[0], iconToBounds.get(item)[1], item));
             JLabel label = new JLabel(item, JLabel.CENTER);
             label.setAlignmentX(Component.CENTER_ALIGNMENT);
             label.setFont(new Font("Arial", Font.PLAIN, 14));
