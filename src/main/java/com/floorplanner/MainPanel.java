@@ -64,7 +64,8 @@ public class MainPanel extends JPanel {
                 createNewRoom(a, b, w, h) :
                 new CanvasElement(a, b, w, h, type);
 
-        if(OverlapChecker.roomOverlap(newElement, a, b, type)){
+        if(OverlapChecker.roomOverlap(newElement, a, b, type) ||
+        OverlapChecker.borderOverlap(newElement, a, b)){
             JOptionPane.showMessageDialog(MainPanel.this,
                     "You cannot place overlapping objects.",
                     "Overlapping Objects",
@@ -164,62 +165,18 @@ public class MainPanel extends JPanel {
     }
 
     private void setupElement(CanvasElement element) {
-        
-
          // Check if the element is a Room
         if (element instanceof Room) {
             // Directly add the CanvasElement to the panel for rooms
             element.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
             // Add interactivity to element
-            element.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    System.out.println("Room clicked: " + ((Room) element).getRoomType());
-                }
-            });
-            element.addMouseMotionListener(new MouseAdapter() {
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    int newX = e.getX() + element.getX();
-                    int newY = e.getY() + element.getY();
-                    element.setLocation(newX, newY);
-                    element.setElemX(newX);  // Update the CanvasElement position
-                    element.setElemY(newY);  // Update the CanvasElement position
-                    repaint();
-                }
-            });
-            
+            element.addMouseListeners();
+
             this.add(element);
             System.out.println("Room added to panel: " + ((Room) element).getRoomType());
         } else {
 
-            ImageIcon icon = getIconForItem(element.getType());
-            JLabel label = new JLabel(icon);
-            label.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
-
-            // Add interactivity to label
-            label.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    System.out.println("Element clicked: " + element);
-                }
-            });
-            label.addMouseMotionListener(new MouseAdapter() {
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    int newX = e.getX() + label.getX();
-                    int newY = e.getY() + label.getY();
-                    label.setLocation(newX, newY);
-                    element.setElemX(newX);  // Update the CanvasElement position
-                    element.setElemY(newY);  // Update the CanvasElement position
-                    repaint();
-                }
-            });
-            this.add(label);
-            System.out.println("Element added to panel: " + element.getType());
         }
-        // Add element to the panel
-        
         this.revalidate();
         this.repaint();
     }

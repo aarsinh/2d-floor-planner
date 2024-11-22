@@ -62,11 +62,14 @@ class CanvasElement extends JPanel implements Serializable {
         setBounds(x, y, width, height);
         startX = getX();
         startY = getY();
+        addMouseListeners();
+    }
+    void addMouseListeners() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 //if a furniture/fixture is pressed with a right click then it rotates
-                if(e.getButton()==MouseEvent.BUTTON3 && typeToIconPath.containsKey(CanvasElement.this.getType())){
+                if (e.getButton() == MouseEvent.BUTTON3 && typeToIconPath.containsKey(CanvasElement.this.getType())) {
                     rotate();
                     revalidate();
                     repaint();
@@ -77,8 +80,7 @@ class CanvasElement extends JPanel implements Serializable {
                     originalHeight = height;
                     startX = e.getXOnScreen();
                     startY = e.getYOnScreen();
-                }
-                else if (e.getX() >= 0 && e.getX() <= width &&
+                } else if (e.getX() >= 0 && e.getX() <= width &&
                         e.getY() >= 0 && e.getY() <= height) {
                     isDragging = true;
                     dragOffsetX = e.getX();
@@ -90,7 +92,8 @@ class CanvasElement extends JPanel implements Serializable {
             public void mouseReleased(MouseEvent e) {
                 isDragging = false;
                 isResizing = false;
-                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type)) {
+                if (OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type) ||
+                OverlapChecker.borderOverlap(CanvasElement.this, getX(), getY())) {
                     JOptionPane.showMessageDialog(null,
                             "You cannot place overlapping objects.",
                             "Overlapping Objects",
@@ -112,7 +115,7 @@ class CanvasElement extends JPanel implements Serializable {
 
                     width = Math.max(50, originalWidth + deltaWidth);
                     height = Math.max(50, originalHeight + deltaHeight);
-                    setBounds(getX(), getY(), width + RESIZE_MARGIN, height + RESIZE_MARGIN);
+                    setBounds(getX(), getY(), width, height);
                     revalidate();
                     repaint();
                 } else if (isDragging) {
@@ -124,9 +127,9 @@ class CanvasElement extends JPanel implements Serializable {
                     setLocation(newX, newY);
 
                     // if a room is being dragged, then every element which is inside the room moves by the delta values
-                    if(CanvasElement.this.type.equals("Room")) {
+                    if (CanvasElement.this.type.equals("Room")) {
                         for (CanvasElement el : elements) {
-                            if (el.getBounds().intersects(CanvasElement.this.getBounds())) {
+                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
                                 // some bounds issues are there because of the 100*100 of the icons
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
@@ -136,7 +139,6 @@ class CanvasElement extends JPanel implements Serializable {
             }
         });
     }
-
     private void setIcon(String type) {
         this.iconPath = typeToIconPath.get(type);
         if(iconPath != null) {
