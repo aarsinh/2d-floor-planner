@@ -8,6 +8,7 @@ class Canvas extends JFrame {
     private ControlPanel controlPanel;
     public static Stack<CanvasElement> undoStack = new Stack<>();
     private SavePanel savePanel;
+
     public Canvas() {
         setTitle("2D Floor Planner");
         this.controlPanel = new ControlPanel();
@@ -18,10 +19,7 @@ class Canvas extends JFrame {
         add(controlPanel.mPanel, BorderLayout.CENTER);
         add(savePanel, BorderLayout.EAST);
 
-        //m.setLayout(null);
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible(true);
-        //this.savePanel = new SavePanel();
     }
 }
