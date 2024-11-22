@@ -57,7 +57,7 @@ class CanvasElement extends JPanel implements Serializable {
         this.type = type;
         setOpaque(false);
         setIcon(type);
-        setBounds(x, y, width + RESIZE_MARGIN, height + RESIZE_MARGIN);
+        setBounds(x, y, width, height);
         startX = getX();
         startY = getY();
         addMouseListener(new MouseAdapter() {
@@ -82,7 +82,8 @@ class CanvasElement extends JPanel implements Serializable {
             public void mouseReleased(MouseEvent e) {
                 isDragging = false;
                 isResizing = false;
-                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type)) {
+                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type) ||
+                        OverlapChecker.borderOverlap(CanvasElement.this, getX(), getY())) {
                     JOptionPane.showMessageDialog(null,
                             "You cannot place overlapping objects.",
                             "Overlapping Objects",
@@ -104,7 +105,7 @@ class CanvasElement extends JPanel implements Serializable {
 
                     width = Math.max(50, originalWidth + deltaWidth);
                     height = Math.max(50, originalHeight + deltaHeight);
-                    setBounds(getX(), getY(), width + RESIZE_MARGIN, height + RESIZE_MARGIN);
+                    setBounds(getX(), getY(), width, height);
                     revalidate();
                     repaint();
                 } else if (isDragging) {
@@ -118,8 +119,7 @@ class CanvasElement extends JPanel implements Serializable {
                     // if a room is being dragged, then every element which is inside the room moves by the delta values
                     if(CanvasElement.this.type.equals("Room")) {
                         for (CanvasElement el : elements) {
-                            if (el.getBounds().intersects(CanvasElement.this.getBounds())) {
-                                // some bounds issues are there because of the 100*100 of the icons
+                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
                         }
@@ -171,7 +171,4 @@ class CanvasElement extends JPanel implements Serializable {
             g2d.drawRect(5, 5, width - 10, height - 10);
         }
     }
-
-
-
 }
