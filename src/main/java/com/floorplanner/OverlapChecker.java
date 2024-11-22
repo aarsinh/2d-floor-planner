@@ -10,12 +10,19 @@ class OverlapChecker{
     public static boolean roomOverlap(CanvasElement newElement, int x, int y, String type) {
         Rectangle newBounds = new Rectangle(x, y, newElement.getWidth(), newElement.getHeight());
 
-        // creates an Iterable of any type that is a subclass of CanvasElement
-        // and sets it to either the rooms list or elements list(contains everything but rooms) to iterate over in the foreach loop
-        Iterable<? extends CanvasElement> elementsToCheck = type.equals("Room") ? CanvasElement.rooms : CanvasElement.elements;
-        for (CanvasElement e : elementsToCheck) {
-            if (e != newElement && e.getBounds().intersects(newBounds)) {
-                return true;
+        if(type.equals("Room")) {
+            for (Room r : CanvasElement.rooms) {
+                if (r != newElement && r.getBounds().intersects(newBounds)) {
+                    return true;
+                }
+            }
+        } else if(!type.equals("Room")){
+            Rectangle currentBounds = new Rectangle(x, y, ControlPanel.iconToBounds.get(type)[0], ControlPanel.iconToBounds.get(type)[1]);
+            for (CanvasElement e : CanvasElement.elements){
+                Rectangle eBounds = new Rectangle(e.getX(), e.getY(), ControlPanel.iconToBounds.get(e.getType())[0], ControlPanel.iconToBounds.get(e.getType())[1]);
+                if (e != newElement && eBounds.intersects(currentBounds)) {
+                    return true;
+                }
             }
         }
         return false;

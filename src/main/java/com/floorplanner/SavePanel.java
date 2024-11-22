@@ -17,14 +17,13 @@ public class SavePanel extends JPanel {
     private int y;
     private MainPanel mainPanel;
     private File currentFile;
-
     public SavePanel(MainPanel mainPanel) {
-        this.mainPanel = mainPanel;
-        this.panelColor = new Color(0xD9D9D9);
+        this.panelColor = new Color(0xC4C4C4);
         this.width = 200;
         this.height = 700;
         this.x = 1000;
         this.y = 200;
+        this.mainPanel = mainPanel;
         initializePanel();
         setUpLayout();
     }   
@@ -76,14 +75,14 @@ public class SavePanel extends JPanel {
                             savedElementsList = (List<CanvasElement>) obj;
                         }
                     } catch (IOException | ClassNotFoundException e) {
-                        JOptionPane.showMessageDialog(this, "Failed to load existing elements.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(mainPanel, "Failed to load existing elements.", "Error", JOptionPane.ERROR_MESSAGE);
                         e.printStackTrace();
                         return;
                     }
                 }
 
                 // Add new elements to the loaded list
-                // List<CanvasElement> newElements = CanvasElement.elements; 
+                // List<CanvasElement> newElements = CanvasElement.elements;
                 // savedElementsList.addAll(newElements);
                 // Avoid duplicate additions to savedElementsList
                 for (CanvasElement element : CanvasElement.elements) {
@@ -95,26 +94,26 @@ public class SavePanel extends JPanel {
                 // Save the updated list back to the file
                 try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(currentFile))) {
                     if (savedElementsList.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "No elements to save.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(mainPanel, "No elements to save.", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
                         oos.writeObject(savedElementsList);
-                        JOptionPane.showMessageDialog(this, "Layout saved successfully!");
+                        JOptionPane.showMessageDialog(mainPanel, "Layout saved successfully!");
                         System.out.println("File size in bytes: " + currentFile.length());
                         System.out.println(String.format("Saved %d elements to file.", savedElementsList.size()));
                     }
                 }
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Failed to save layout.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(mainPanel, "Failed to save layout.", "Error", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         } else {
             //No file specified yet, so show JFileChooser for the initial area
             JFileChooser fileChooser = new JFileChooser();
-            int response = fileChooser.showSaveDialog(this);
+            int response = fileChooser.showSaveDialog(mainPanel);
             if (response == JFileChooser.APPROVE_OPTION) {
                 // Get the file chosen by the user
                 File file = fileChooser.getSelectedFile();
-                
+
                 // Check if the file exists and load existing elements if necessary
                 List<CanvasElement> savedElementsList = new ArrayList<>();
                 if (file.exists()) {
@@ -124,28 +123,28 @@ public class SavePanel extends JPanel {
                             savedElementsList = (List<CanvasElement>) obj;
                         }
                     } catch (IOException | ClassNotFoundException e) {
-                        JOptionPane.showMessageDialog(this, "Failed to load existing elements.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(mainPanel, "Failed to load existing elements.", "Error", JOptionPane.ERROR_MESSAGE);
                         e.printStackTrace();
                         return; // Exit the method if loading fails
                     }
                 }
-                
+
                 // Add new elements to the list
                 List<CanvasElement> newElements = CanvasElement.elements; // Assuming this is a static list of CanvasElement objects
                 savedElementsList.addAll(newElements); // Append new elements to the existing list
-                
+
                 // Save the updated list back to the file
                 try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
                     if (savedElementsList.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "No elements to save.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(mainPanel, "No elements to save.", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
                         oos.writeObject(savedElementsList); // Serialize the list of CanvasElements
-                        JOptionPane.showMessageDialog(this, "Layout saved successfully!");
+                        JOptionPane.showMessageDialog(mainPanel, "Layout saved successfully!");
                         System.out.println("File size in bytes: " + file.length());
                         System.out.println(String.format("Saved %d elements to file.", savedElementsList.size()));
                     }
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(this, "Failed to save layout.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(mainPanel, "Failed to save layout.", "Error", JOptionPane.ERROR_MESSAGE);
                     e.printStackTrace();
                 }
             }
@@ -154,12 +153,10 @@ public class SavePanel extends JPanel {
 
     void loadAction() {
         JFileChooser fileChooser = new JFileChooser();
-        int response = fileChooser.showOpenDialog(this);
+        int response = fileChooser.showOpenDialog(mainPanel);
         if (response == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-
             CanvasElement.elements.clear();
-            
             mainPanel.loadElementsFromFile(file.getAbsolutePath());
         }
     }

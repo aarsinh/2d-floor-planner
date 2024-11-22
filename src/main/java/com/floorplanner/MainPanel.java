@@ -22,8 +22,8 @@ public class MainPanel extends JPanel {
     private int y;
     private File currentFile;
 
-    public MainPanel(){
-        this.MpanelColor = new Color(0xFFFBFB);
+    public MainPanel() {
+        this.MpanelColor = new Color(0xD9D9D9);
         setBackground(MpanelColor);
         setLayout(null);
 
@@ -42,12 +42,24 @@ public class MainPanel extends JPanel {
         });
     }
 
-    public File getCurrentFile() { return currentFile; }
-
+    private Room createNewRoom(int a, int b, int w, int h) {
+        String[] roomTypes = {"Bedroom", "Bathroom", "Kitchen", "Living Room", "Dining Room"};
+        String selectedRoomType = (String) JOptionPane.showInputDialog(
+                this,
+                "Select Room Type: ",
+                "Room Type",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                roomTypes,
+                roomTypes[0]
+        );
+        Room newRoom = new Room(a, b, w, h, "Room", selectedRoomType);
+        return newRoom;
+    }
 
     public void triggerCustomPaint(int a, int b, int w, int h, String type) {
         CanvasElement newElement = type.equals("Room") ?
-                new Room(a, b, w, h, type) :
+                createNewRoom(a, b, w, h) :
                 new CanvasElement(a, b, w , h, type);
 
         if(OverlapChecker.roomOverlap(newElement, a, b, type)){
@@ -61,36 +73,13 @@ public class MainPanel extends JPanel {
             } else {
                 CanvasElement.elements.add(newElement);
             }
-            setUpElement(newElement);
+            this.add(newElement);
+            if(newElement instanceof Room) {
+                this.setComponentZOrder(newElement, this.getComponentCount() - 1);
+            } else {
+                this.setComponentZOrder(newElement, 0);
+            }
         }
-    }
-
-    private void setUpElement(CanvasElement element) {
-        ImageIcon icon = getIconForItem(element.getType());
-        JLabel label = new JLabel(icon);
-        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
-        
-        // Add interactivity to label
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                System.out.println("Element clicked: " + element);
-            }
-        });
-
-        label.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                int newX = e.getX() + label.getX();
-                int newY = e.getY() + label.getY();
-                label.setLocation(newX, newY);
-                element.setElemX(newX);  // Update the CanvasElement position
-                element.setElemY(newY);  // Update the CanvasElement position
-                repaint();
-            }
-        });
-        // Add element to the panel
-        this.add(label);
         this.revalidate();
         this.repaint();
     }
@@ -98,7 +87,6 @@ public class MainPanel extends JPanel {
     public void loadElementsFromFile(String filename) {
         File file = new File(filename);
         this.currentFile = file;
-
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             Object obj = ois.readObject();
             if (obj instanceof List<?>) {
@@ -112,12 +100,9 @@ public class MainPanel extends JPanel {
                     CanvasElement.elements.clear();
                     
                     for (CanvasElement element : elementsList) {
-                        // Create label or component for the element
-                        // CanvasElement.elements.add(element);
-                        // setUpElement(element);
-                        if (!CanvasElement.elements.contains(element)) { // Avoid adding duplicates
+                        if (!CanvasElement.elements.contains(element)) {
                             CanvasElement.elements.add(element);
-                            setUpElement(element);
+                            setupElement(element);
                         }
                     }
                     this.revalidate();
@@ -158,4 +143,35 @@ public class MainPanel extends JPanel {
             default: return null;
         }
     }
+
+    private void setupElement(CanvasElement element) {
+        ImageIcon icon = getIconForItem(element.getType());
+        JLabel label = new JLabel(icon);
+        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+
+        // Add interactivity to label
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Element clicked: " + element);
+            }
+        });
+        label.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                int newX = e.getX() + label.getX();
+                int newY = e.getY() + label.getY();
+                label.setLocation(newX, newY);
+                element.setElemX(newX);  // Update the CanvasElement position
+                element.setElemY(newY);  // Update the CanvasElement position
+                repaint();
+            }
+        });
+        // Add element to the panel
+        this.add(label);
+        this.revalidate();
+        this.repaint();
+    }
+
+    public File getCurrentFile() { return currentFile; }
 }

@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 
 public class ControlPanel extends JPanel {
@@ -14,6 +16,27 @@ public class ControlPanel extends JPanel {
     private int y;
     public MainPanel mPanel;
     private boolean isMousePressed = false;
+
+    static Map<String, int[]> iconToBounds = new HashMap<>();
+
+    static {
+        iconToBounds.put("Table", new int[]{54, 30});
+        iconToBounds.put("Single Bed", new int[]{30, 55});
+        iconToBounds.put("Double Bed", new int[]{46, 55});
+        iconToBounds.put("Chair", new int[]{48, 47});
+        iconToBounds.put("Cupboard", new int[]{46, 26});
+        iconToBounds.put("Dining Set", new int[]{41, 41});
+        iconToBounds.put("Sofa", new int[]{50, 28});
+        iconToBounds.put("Small Sofa", new int[]{46, 39});
+        iconToBounds.put("Big Sofa", new int[]{48, 33});
+        iconToBounds.put("Bathtub", new int[]{26, 48});
+        iconToBounds.put("Toilet", new int[]{34, 50});
+        iconToBounds.put("Shower", new int[]{57, 58});
+        iconToBounds.put("Sink", new int[]{54, 36});
+        iconToBounds.put("Stove", new int[]{58, 58});
+        iconToBounds.put("Kitchen Sink", new int[]{60, 34});
+        iconToBounds.put("TV", new int[]{0, 0}); // Default size
+    }
 
     public String[] essentials = new String[]{"Room", "Door", "Window"};
     public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
