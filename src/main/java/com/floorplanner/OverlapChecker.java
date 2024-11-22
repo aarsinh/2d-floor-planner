@@ -10,6 +10,7 @@ class OverlapChecker{
     public static boolean roomOverlap(CanvasElement newElement, int x, int y, String type) {
         Rectangle newBounds = new Rectangle(x, y, newElement.getWidth(), newElement.getHeight());
 
+        // Iterable<? extends CanvasElement>
         if(type.equals("Room")) {
             for (Room r : CanvasElement.rooms) {
                 if (r != newElement && r.getBounds().intersects(newBounds)) {

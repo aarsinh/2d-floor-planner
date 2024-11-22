@@ -16,7 +16,7 @@ class CanvasElement extends JPanel implements Serializable {
     private boolean isDragging = false;
     private boolean isResizing = false;
     private int dragOffsetX, dragOffsetY;
-    private static final int RESIZE_MARGIN = 10;
+    static final int RESIZE_MARGIN = 10;
     private int originalHeight, originalWidth;
     private int startX, startY;
 
@@ -49,7 +49,7 @@ class CanvasElement extends JPanel implements Serializable {
         typeToIconPath.put("TV", "src/main/resources/tv.png");
     }
 
-    public CanvasElement(int x1, int y1, int h, int w, String type) {
+    public CanvasElement(int x1, int y1, int w, int h, String type) {
         this.x = x1;
         this.y = y1;
         this.height = h;
