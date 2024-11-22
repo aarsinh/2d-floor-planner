@@ -1,6 +1,7 @@
 package src.main.java.com.floorplanner;
 
 import java.awt.*;
+import java.io.Serializable;
 
 public class Room extends CanvasElement {
     private String roomType;

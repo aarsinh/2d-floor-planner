@@ -98,17 +98,34 @@ public class MainPanel extends JPanel {
                 } else {
                     System.out.println("Loaded " + elementsList.size() + " elements from file.");
                     
+                    // Debugging: Print current state before clearing
+                    System.out.println("Before clearing: ");
+                    System.out.println("Panel component count: " + this.getComponentCount());
+                    System.out.println("Elements list size: " + CanvasElement.elements.size());
+                    System.out.println("Rooms list size: " + CanvasElement.rooms.size());
+                    
                     this.removeAll(); // Clear existing components
                     CanvasElement.elements.clear();
-                    
+                    CanvasElement.rooms.clear();
+
+                    // Debugging: Print current state after clearing
+                    System.out.println("After clearing: ");
+                    System.out.println("Panel component count: " + this.getComponentCount());
+                    System.out.println("Elements list size: " + CanvasElement.elements.size());
+                    System.out.println("Rooms list size: " + CanvasElement.rooms.size());
+
                     for (CanvasElement element : elementsList) {
-                        if (!CanvasElement.elements.contains(element)) {
+                        if (element instanceof Room) {
+                            CanvasElement.rooms.add((Room) element);
+                            System.out.println("Room loaded: " + ((Room) element).getRoomType());
+                        } else {
                             CanvasElement.elements.add(element);
-                            setupElement(element);
+                            System.out.println("Element loaded: " + element.getType());
                         }
+                        setupElement(element);
                     }
-                    this.revalidate();
-                    this.repaint();
+                    // this.revalidate();
+                    // this.repaint();
                 }
             } else {
                 System.out.println("File content is not a valid list.");
@@ -147,30 +164,62 @@ public class MainPanel extends JPanel {
     }
 
     private void setupElement(CanvasElement element) {
-        ImageIcon icon = getIconForItem(element.getType());
-        JLabel label = new JLabel(icon);
-        label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+        
 
-        // Add interactivity to label
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                System.out.println("Element clicked: " + element);
-            }
-        });
-        label.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                int newX = e.getX() + label.getX();
-                int newY = e.getY() + label.getY();
-                label.setLocation(newX, newY);
-                element.setElemX(newX);  // Update the CanvasElement position
-                element.setElemY(newY);  // Update the CanvasElement position
-                repaint();
-            }
-        });
+         // Check if the element is a Room
+        if (element instanceof Room) {
+            // Directly add the CanvasElement to the panel for rooms
+            element.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+            // Add interactivity to element
+            element.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    System.out.println("Room clicked: " + ((Room) element).getRoomType());
+                }
+            });
+            element.addMouseMotionListener(new MouseAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    int newX = e.getX() + element.getX();
+                    int newY = e.getY() + element.getY();
+                    element.setLocation(newX, newY);
+                    element.setElemX(newX);  // Update the CanvasElement position
+                    element.setElemY(newY);  // Update the CanvasElement position
+                    repaint();
+                }
+            });
+            
+            this.add(element);
+            System.out.println("Room added to panel: " + ((Room) element).getRoomType());
+        } else {
+
+            ImageIcon icon = getIconForItem(element.getType());
+            JLabel label = new JLabel(icon);
+            label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+
+            // Add interactivity to label
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    System.out.println("Element clicked: " + element);
+                }
+            });
+            label.addMouseMotionListener(new MouseAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    int newX = e.getX() + label.getX();
+                    int newY = e.getY() + label.getY();
+                    label.setLocation(newX, newY);
+                    element.setElemX(newX);  // Update the CanvasElement position
+                    element.setElemY(newY);  // Update the CanvasElement position
+                    repaint();
+                }
+            });
+            this.add(label);
+            System.out.println("Element added to panel: " + element.getType());
+        }
         // Add element to the panel
-        this.add(label);
+        
         this.revalidate();
         this.repaint();
     }
