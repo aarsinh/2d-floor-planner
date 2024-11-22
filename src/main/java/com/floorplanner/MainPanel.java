@@ -169,7 +169,7 @@ public class MainPanel extends JPanel {
          // Check if the element is a Room
         if (element instanceof Room) {
             // Directly add the CanvasElement to the panel for rooms
-            element.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+            element.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
             // Add interactivity to element
             element.addMouseListener(new MouseAdapter() {
                 @Override
@@ -195,7 +195,7 @@ public class MainPanel extends JPanel {
 
             ImageIcon icon = getIconForItem(element.getType());
             JLabel label = new JLabel(icon);
-            label.setBounds(element.getElemX(), element.getElemY(), element.getWidth(), element.getHeight());
+            label.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
 
             // Add interactivity to label
             label.addMouseListener(new MouseAdapter() {
