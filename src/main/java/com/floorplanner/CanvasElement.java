@@ -64,6 +64,7 @@ class CanvasElement extends JPanel implements Serializable {
         startY = getY();
         addMouseListeners();
     }
+
     void addMouseListeners() {
         addMouseListener(new MouseAdapter() {
             @Override
@@ -139,7 +140,7 @@ class CanvasElement extends JPanel implements Serializable {
             }
         });
     }
-    private void setIcon(String type) {
+    public void setIcon(String type) {
         this.iconPath = typeToIconPath.get(type);
         if(iconPath != null) {
             this.icon = new ImageIcon(iconPath);
@@ -171,7 +172,6 @@ class CanvasElement extends JPanel implements Serializable {
 
     @Override
     protected void paintComponent(Graphics g) {
-
         super.paintComponent(g);
         Graphics2D g2d= (Graphics2D) g.create();
         if (icon != null) {
