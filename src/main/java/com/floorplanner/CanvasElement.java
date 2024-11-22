@@ -19,6 +19,7 @@ class CanvasElement extends JPanel implements Serializable {
     static final int RESIZE_MARGIN = 10;
     private int originalHeight, originalWidth;
     private int startX, startY;
+    private double rotationAngle;
 
     private String iconPath;
     private transient ImageIcon icon;
@@ -55,6 +56,7 @@ class CanvasElement extends JPanel implements Serializable {
         this.height = h;
         this.width = w;
         this.type = type;
+        this.rotationAngle = 0;
         setOpaque(false);
         setIcon(type);
         setBounds(x, y, width, height);
@@ -63,6 +65,12 @@ class CanvasElement extends JPanel implements Serializable {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                //if a furniture/fixture is pressed with a right click then it rotates
+                if(e.getButton()==MouseEvent.BUTTON3 && typeToIconPath.containsKey(CanvasElement.this.getType())){
+                    rotate();
+                    revalidate();
+                    repaint();
+                }
                 if (isResizeRegion(e.getX(), e.getY())) {
                     isResizing = true;
                     originalWidth = width;
@@ -82,8 +90,7 @@ class CanvasElement extends JPanel implements Serializable {
             public void mouseReleased(MouseEvent e) {
                 isDragging = false;
                 isResizing = false;
-                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type) ||
-                        OverlapChecker.borderOverlap(CanvasElement.this, getX(), getY())) {
+                if(OverlapChecker.roomOverlap(CanvasElement.this, getX(), getY(), CanvasElement.this.type)) {
                     JOptionPane.showMessageDialog(null,
                             "You cannot place overlapping objects.",
                             "Overlapping Objects",
@@ -105,7 +112,7 @@ class CanvasElement extends JPanel implements Serializable {
 
                     width = Math.max(50, originalWidth + deltaWidth);
                     height = Math.max(50, originalHeight + deltaHeight);
-                    setBounds(getX(), getY(), width, height);
+                    setBounds(getX(), getY(), width + RESIZE_MARGIN, height + RESIZE_MARGIN);
                     revalidate();
                     repaint();
                 } else if (isDragging) {
@@ -119,7 +126,8 @@ class CanvasElement extends JPanel implements Serializable {
                     // if a room is being dragged, then every element which is inside the room moves by the delta values
                     if(CanvasElement.this.type.equals("Room")) {
                         for (CanvasElement el : elements) {
-                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
+                            if (el.getBounds().intersects(CanvasElement.this.getBounds())) {
+                                // some bounds issues are there because of the 100*100 of the icons
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
                         }
@@ -144,6 +152,7 @@ class CanvasElement extends JPanel implements Serializable {
 
     public int getHeight() { return height; }
 
+
     public int getWidth() { return width; }
 
     public String getType() { return type; }
@@ -152,23 +161,45 @@ class CanvasElement extends JPanel implements Serializable {
                 (y - height) * (y - height) <= RESIZE_MARGIN * RESIZE_MARGIN);
     }
 
+
+    private void rotate(){
+        rotationAngle = -Math.PI/2;
+        //setPreferredSize(new Dimension(icon.getIconHeight(), icon.getIconWidth()));
+        revalidate();
+        repaint();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        Graphics2D g2d= (Graphics2D) g.create();
         if (icon != null) {
-            icon.paintIcon(this, g, 0, 0);
-        } else if (type.equals("Room")) {
-            super.paintComponent(g);
+                int centerX = getWidth()/2;
+                int centerY = getHeight()/2;
+                g2d.rotate(rotationAngle, centerX, centerY);
+                int iconX = centerX - icon.getIconWidth() / 2;
+                int iconY = centerY - icon.getIconHeight() / 2;
+                icon.paintIcon(this, g2d, iconX, iconY);
+                g2d.dispose();
+                //icon.paintIcon(this, g, 0, 0);
+        }
+        else if (type.equals("Room")) {
+//            super.paintComponent(g);
             Room room = (Room) this;
 
-            Graphics2D g2d = (Graphics2D) g;
+            //Graphics2D g2d = (Graphics2D) g;
 
             g2d.setColor(Room.getRoomColor(room.getRoomType()));
             g2d.fillRect(0, 0 , width, height);
 
             // Add thicker border
-            g2d.setStroke(new BasicStroke(10)); 
-            g2d.setColor(Color.BLACK); 
+            g2d.setStroke(new BasicStroke(10));
+            g2d.setColor(Color.BLACK);
             g2d.drawRect(5, 5, width - 10, height - 10);
         }
     }
+
+
+
 }
