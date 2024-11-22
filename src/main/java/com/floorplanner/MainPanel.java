@@ -99,34 +99,19 @@ public class MainPanel extends JPanel {
                 } else {
                     System.out.println("Loaded " + elementsList.size() + " elements from file.");
                     
-                    // Debugging: Print current state before clearing
-                    System.out.println("Before clearing: ");
-                    System.out.println("Panel component count: " + this.getComponentCount());
-                    System.out.println("Elements list size: " + CanvasElement.elements.size());
-                    System.out.println("Rooms list size: " + CanvasElement.rooms.size());
-                    
                     this.removeAll(); // Clear existing components
                     CanvasElement.elements.clear();
                     CanvasElement.rooms.clear();
 
-                    // Debugging: Print current state after clearing
-                    System.out.println("After clearing: ");
-                    System.out.println("Panel component count: " + this.getComponentCount());
-                    System.out.println("Elements list size: " + CanvasElement.elements.size());
-                    System.out.println("Rooms list size: " + CanvasElement.rooms.size());
 
                     for (CanvasElement element : elementsList) {
                         if (element instanceof Room) {
                             CanvasElement.rooms.add((Room) element);
-                            System.out.println("Room loaded: " + ((Room) element).getRoomType());
                         } else {
                             CanvasElement.elements.add(element);
-                            System.out.println("Element loaded: " + element.getType());
                         }
                         setupElement(element);
                     }
-                    // this.revalidate();
-                    // this.repaint();
                 }
             } else {
                 System.out.println("File content is not a valid list.");
@@ -139,44 +124,13 @@ public class MainPanel extends JPanel {
         }
     }
 
-    private ImageIcon getIconForItem(String itemName) {
-        switch (itemName) {
-            case "Square Room": return new ImageIcon("src/main/resources/room-icon.png");
-            case "Door": return new ImageIcon("src/main/resources/door-symbol.png");
-            case "Window": return new ImageIcon("src/main/resources/window.png");
-            case "Table": return new ImageIcon("src/main/resources/table.png");
-            case "Single Bed": return new ImageIcon("src/main/resources/single-bed.png");
-            case "Double Bed": return new ImageIcon("src/main/resources/double-bed.png");
-            case "Chair": return new ImageIcon("src/main/resources/chair.png");
-            case "Cupboard": return new ImageIcon("src/main/resources/cupboard.png");
-            case "Dining Set": return new ImageIcon("src/main/resources/diningset.png");
-            case "Sofa": return new ImageIcon("src/main/resources/sofa.png");
-            case "Small Sofa": return new ImageIcon("src/main/resources/small-sofa.png");
-            case "Big Sofa": return new ImageIcon("src/main/resources/big-sofa.png");
-            case "TV": return new ImageIcon("src/main/resources/room-icon.png");
-            case "Bathtub": return new ImageIcon("src/main/resources/bathtub.png");
-            case "Toilet": return new ImageIcon("src/main/resources/toilet.png");
-            case "Shower": return new ImageIcon("src/main/resources/shower.png");
-            case "Wash Basin": return new ImageIcon("src/main/resources/sink.png");
-            case "Stove": return new ImageIcon("src/main/resources/stove.png");
-            case "Kitchen Sink": return new ImageIcon("src/main/resources/kitchen-sink.png");
-            default: return null;
-        }
-    }
-
     private void setupElement(CanvasElement element) {
-         // Check if the element is a Room
-        if (element instanceof Room) {
-            // Directly add the CanvasElement to the panel for rooms
-            element.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
-            // Add interactivity to element
-            element.addMouseListeners();
-
-            this.add(element);
-            System.out.println("Room added to panel: " + ((Room) element).getRoomType());
-        } else {
-
+        element.setBounds(element.getX(), element.getY(), element.getWidth(), element.getHeight());
+        if(!(element instanceof Room)) {
+            element.setIcon(element.getType());
         }
+        element.addMouseListeners();
+        this.add(element);
         this.revalidate();
         this.repaint();
     }
