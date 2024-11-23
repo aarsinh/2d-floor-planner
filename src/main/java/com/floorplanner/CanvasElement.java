@@ -144,11 +144,6 @@ class CanvasElement extends JPanel implements Serializable {
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
                         }
-                        for (CanvasElement el : rooms) {
-                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
-                                el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
-                            }
-                        }
                     }
                                         
                 }
@@ -193,7 +188,7 @@ class CanvasElement extends JPanel implements Serializable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        if (icon != null && (type.equals("Door") || type.equals("Window"))) {
+        if (icon != null) {
                 int centerX = getWidth()/2;
                 int centerY = getHeight()/2;
                 g2d.rotate(rotationAngle, centerX, centerY);
@@ -208,22 +203,20 @@ class CanvasElement extends JPanel implements Serializable {
             g2d.setColor(Room.getRoomColor(room.getRoomType()));
             g2d.fillRect(0, 0 , width, height);
 
-            // Add thicker border
             g2d.setStroke(new BasicStroke(10));
             g2d.setColor(Color.BLACK);
             g2d.drawRect(5, 5, width - 10, height - 10);
         }
         else if (type.equals("Door") || type.equals("Window")) {
-            int thickness = 10; // Border thickness
-            int length = 30;    // Door/Window length
+            int thickness = 10;
+            int length = 30;
             int posX = 0, posY = 0, rectWidth = thickness, rectHeight = length;
-        
-            // Determine the border based on proximity
+
             for (Room room : CanvasElement.rooms) {
-                if (Math.abs(getX() - room.getX()) <= thickness) { // Near left border
-                    posX = 0; // Align with left
-                    posY = (getHeight() - length) / 2; // Center vertically
-                } else if (Math.abs(getX() + getWidth() - (room.getX() + room.getWidth())) <= thickness) { // Near right border
+                if (Math.abs(getX() - room.getX()) <= thickness) {
+                    posX = 0;
+                    posY = (getHeight() - length) / 2;
+                } else if (Math.abs(getX() + getWidth() - (room.getX() + room.getWidth())) <= thickness) {
                     posX = getWidth() - thickness; // Align with right
                     posY = (getHeight() - length) / 2; // Center vertically
                 } else if (Math.abs(getY() - room.getY()) <= thickness) { // Near top border
