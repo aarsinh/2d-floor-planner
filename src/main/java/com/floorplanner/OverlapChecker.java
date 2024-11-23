@@ -29,7 +29,7 @@ class OverlapChecker{
 
     public static boolean borderOverlap(CanvasElement e, int x, int y) {
         Rectangle newBounds = new Rectangle(x, y, e.getWidth(), e.getHeight());
-        if(!e.getType().equals("Room")) {
+        if(!(e.getType().equals("Room") || e.getType().equals("Door") || e.getType().equals("Window"))) {
             for (Room r : CanvasElement.rooms) {
                 if(r.getBounds().intersects(newBounds) && !r.getBounds().contains(newBounds)) {
                     return true;

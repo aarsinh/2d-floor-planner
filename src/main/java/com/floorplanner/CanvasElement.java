@@ -102,6 +102,13 @@ class CanvasElement extends JPanel implements Serializable {
                             "Overlapping Objects",
                             JOptionPane.WARNING_MESSAGE);
                     setLocation(startX, startY);
+                    if(CanvasElement.this.type.equals("Room")) {
+                        for(CanvasElement el: elements) {
+                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
+                                el.setLocation(el.startX, el.startY);
+                            }
+                        }
+                    }
                 } else {
                     startX = getX();
                     startY = getY();
@@ -132,6 +139,7 @@ class CanvasElement extends JPanel implements Serializable {
                     // if a room is being dragged, then every element which is inside the room moves by the delta values
                     if (CanvasElement.this.type.equals("Room")) {
                         for (CanvasElement el : elements) {
+                            el.isDragging = true;
                             if (CanvasElement.this.getBounds().contains(el.getBounds())) {
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }

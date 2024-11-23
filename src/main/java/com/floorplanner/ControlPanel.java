@@ -42,7 +42,7 @@ public class ControlPanel extends JPanel {
     }
 
     public String[] essentials = new String[]{"Room", "Door", "Window"};
-    public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
+    public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/window.png"};
 
     public String[] furniture = new String[]{
             "Table", "Single Bed", "Double Bed",
