@@ -36,7 +36,7 @@ public class ControlPanel extends JPanel {
         iconToBounds.put("Sink", new int[]{54, 36});
         iconToBounds.put("Stove", new int[]{59, 59});
         iconToBounds.put("Kitchen Sink", new int[]{60, 34});
-        iconToBounds.put("TV", new int[]{0, 0}); // Default size
+        iconToBounds.put("TV", new int[]{60, 18}); // Default size
     }
 
     public String[] essentials = new String[]{"Room", "Door", "Window"};
@@ -52,7 +52,7 @@ public class ControlPanel extends JPanel {
             "src/main/resources/table.png", "src/main/resources/single-bed.png", "src/main/resources/double-bed.png",
             "src/main/resources/chair.png", "src/main/resources/cupboard.png", "src/main/resources/diningset.png",
             "src/main/resources/sofa.png", "src/main/resources/small-sofa.png", "src/main/resources/big-sofa.png",
-            "src/main/resources/room-icon.png"
+            "src/main/resources/tv.png"
     };
     public String[] fixtures = new String[]{
             "Bathtub", "Toilet", "Shower",
