@@ -21,6 +21,8 @@ public class ControlPanel extends JPanel {
 
     static {
         iconToBounds.put("Room", new int[]{100,100});
+        iconToBounds.put("Door", new int[]{10, 40});
+        iconToBounds.put("Window", new int[]{10, 40});
         iconToBounds.put("Table", new int[]{54, 31});
         iconToBounds.put("Single Bed", new int[]{29, 54});
         iconToBounds.put("Double Bed", new int[]{46, 55});

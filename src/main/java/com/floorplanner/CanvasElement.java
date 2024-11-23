@@ -25,6 +25,8 @@ class CanvasElement extends JPanel implements Serializable {
     private transient ImageIcon icon;
     static List<CanvasElement> elements = new ArrayList<>();
     static List<Room> rooms = new ArrayList<>();
+    static List<Door> doors = new ArrayList<>();
+    static List<Window> windows = new ArrayList<>();
 
     static final Map<String, String> typeToIconPath = new HashMap<>();
 
@@ -87,6 +89,10 @@ class CanvasElement extends JPanel implements Serializable {
                     dragOffsetX = e.getX();
                     dragOffsetY = e.getY();
                 }
+
+                if (type.equals("Room") || type.equals("Window")) {
+                    snapToRoomBorderWithWhitespace(CanvasElement.this);
+                }
             }
 
             @Override
@@ -134,7 +140,13 @@ class CanvasElement extends JPanel implements Serializable {
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
                         }
+                        for (CanvasElement el : rooms) {
+                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
+                                el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
+                            }
+                        }
                     }
+                                        
                 }
             }
         });
@@ -197,8 +209,41 @@ class CanvasElement extends JPanel implements Serializable {
             g2d.setColor(Color.BLACK);
             g2d.drawRect(5, 5, width - 10, height - 10);
         }
+        else if (type.equals("Door") || type.equals("Window")) {
+            g2d.setColor(type.equals("Door") ? Color.WHITE : new Color(0xb7bbe8));
+            g2d.drawRect(0, 0, 10, 40);
+        }
     }
 
-
-
+    protected void snapToRoomBorderWithWhitespace(CanvasElement element) {
+        int whitespace = 40; // Example whitespace value
+        int borderWidth = 10; // Example border width
+    
+        for (Room room : CanvasElement.rooms) {
+            
+            // Check if the element is near the left border of the room
+            if (Math.abs(element.getX() - room.getX()) <= whitespace) {
+                element.setLocation(room.getX() - borderWidth, element.getY());
+                return;
+            }
+    
+            // Check if the element is near the right border of the room
+            if (Math.abs(element.getX() + element.getWidth() - (room.getX() + room.getWidth())) <= whitespace) {
+                element.setLocation(room.getX() + room.getWidth() - element.getWidth() + borderWidth, element.getY());
+                return;
+            }
+    
+            // Check if the element is near the top border of the room
+            if (Math.abs(element.getY() - room.getY()) <= whitespace) {
+                element.setLocation(element.getX(), room.getY() - borderWidth);
+                return;
+            }
+    
+            // Check if the element is near the bottom border of the room
+            if (Math.abs(element.getY() + element.getHeight() - (room.getY() + room.getHeight())) <= whitespace) {
+                element.setLocation(element.getX(), room.getY() + room.getHeight() - element.getHeight() + borderWidth);
+                return;
+            }
+        }
+    }
 }
