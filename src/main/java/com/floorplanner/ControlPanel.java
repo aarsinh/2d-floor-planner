@@ -151,7 +151,7 @@ public class ControlPanel extends JPanel {
         }
 
         private JPanel createButtonWithLabel(String item, ImageIcon icon, JButton button) {
-        
+
             button.addActionListener(e -> mPanel.triggerCustomPaint(200, 200, iconToBounds.get(item)[0], iconToBounds.get(item)[1], item));
             JLabel label = new JLabel(item, JLabel.CENTER);
             label.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -31,13 +31,12 @@ public class SavePanel extends JPanel {
     private void initializePanel() {
         this.setBounds(x, y, width, height);
         this.setBackground(panelColor);
-        this.setLayout(new GridLayout(3, 0));
+        this.setLayout(new GridLayout(2, 0));
         this.setPreferredSize(new Dimension(200, 400));
     }
 
     private void setUpLayout() {
         add(createButtonWithLabel("Save", new ImageIcon("src/main/resources/save.png"), e -> saveAction()));
-        add(createButtonWithLabel("Rotate", new ImageIcon("src/main/resources/rotate.png"), e -> rotate()));
         add(createButtonWithLabel("Load File", new ImageIcon("src/main/resources/load.png"), e -> loadAction()));
     }
 
@@ -102,9 +101,5 @@ public class SavePanel extends JPanel {
             CanvasElement.elements.clear();
             mainPanel.loadElementsFromFile(file.getAbsolutePath());
         }
-    }
-
-    void rotate() {
-        // Rotate action
     }
 }
