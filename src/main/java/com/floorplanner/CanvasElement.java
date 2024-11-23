@@ -193,7 +193,7 @@ class CanvasElement extends JPanel implements Serializable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        if (icon != null && (type.equals("Door") || type.equals("Window"))) {
+        if (icon != null) {
                 int centerX = getWidth()/2;
                 int centerY = getHeight()/2;
                 g2d.rotate(rotationAngle, centerX, centerY);
