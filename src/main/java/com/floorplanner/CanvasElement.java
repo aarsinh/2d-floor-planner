@@ -25,13 +25,15 @@ class CanvasElement extends JPanel implements Serializable {
     private transient ImageIcon icon;
     static List<CanvasElement> elements = new ArrayList<>();
     static List<Room> rooms = new ArrayList<>();
+    static List<Door> doors = new ArrayList<>();
+    static List<Window> windows = new ArrayList<>();
 
     static final Map<String, String> typeToIconPath = new HashMap<>();
 
     static {
         typeToIconPath.put("Room", null);
-        typeToIconPath.put("Door", "src/main/resources/door-symbol.png");
-        typeToIconPath.put("Window", "src/main/resources/window.png");
+        typeToIconPath.put("Door", null);
+        typeToIconPath.put("Window", null);
         typeToIconPath.put("Table", "src/main/resources/table.png");
         typeToIconPath.put("Single Bed", "src/main/resources/single-bed.png");
         typeToIconPath.put("Double Bed", "src/main/resources/double-bed.png");
@@ -134,7 +136,13 @@ class CanvasElement extends JPanel implements Serializable {
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
                         }
+                        for (CanvasElement el : rooms) {
+                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
+                                el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
+                            }
+                        }
                     }
+                                        
                 }
             }
         });
@@ -177,7 +185,7 @@ class CanvasElement extends JPanel implements Serializable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        if (icon != null) {
+        if (icon != null && (type.equals("Door") || type.equals("Window"))) {
                 int centerX = getWidth()/2;
                 int centerY = getHeight()/2;
                 g2d.rotate(rotationAngle, centerX, centerY);
@@ -197,8 +205,41 @@ class CanvasElement extends JPanel implements Serializable {
             g2d.setColor(Color.BLACK);
             g2d.drawRect(5, 5, width - 10, height - 10);
         }
+        else if (type.equals("Door") || type.equals("Window")) {
+            int thickness = 10; // Border thickness
+            int length = 30;    // Door/Window length
+            int posX = 0, posY = 0, rectWidth = thickness, rectHeight = length;
+        
+            // Determine the border based on proximity
+            for (Room room : CanvasElement.rooms) {
+                if (Math.abs(getX() - room.getX()) <= thickness) { // Near left border
+                    posX = 0; // Align with left
+                    posY = (getHeight() - length) / 2; // Center vertically
+                } else if (Math.abs(getX() + getWidth() - (room.getX() + room.getWidth())) <= thickness) { // Near right border
+                    posX = getWidth() - thickness; // Align with right
+                    posY = (getHeight() - length) / 2; // Center vertically
+                } else if (Math.abs(getY() - room.getY()) <= thickness) { // Near top border
+                    posX = (getWidth() - length) / 2; // Center horizontally
+                    posY = 0; // Align with top
+                    rectWidth = length; // Flip dimensions for top/bottom borders
+                    rectHeight = thickness;
+                } else if (Math.abs(getY() + getHeight() - (room.getY() + room.getHeight())) <= thickness) { // Near bottom border
+                    posX = (getWidth() - length) / 2; // Center horizontally
+                    posY = getHeight() - thickness; // Align with bottom
+                    rectWidth = length;
+                    rectHeight = thickness;
+                }
+            }
+        
+            // Draw the door/window on the border
+            g2d.setColor(type.equals("Door") ? Color.WHITE : new Color(0xb7bbe8));
+            g2d.fillRect(posX, posY, rectWidth, rectHeight);
+        
+            // Optional border for visibility
+            g2d.setColor(Color.BLACK);
+            g2d.drawRect(posX, posY, rectWidth, rectHeight);
+        }
     }
-
 
 
 }
