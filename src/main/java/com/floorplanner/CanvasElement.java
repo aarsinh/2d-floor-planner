@@ -131,7 +131,6 @@ class CanvasElement extends JPanel implements Serializable {
                     if (CanvasElement.this.type.equals("Room")) {
                         for (CanvasElement el : elements) {
                             if (CanvasElement.this.getBounds().contains(el.getBounds())) {
-                                // some bounds issues are there because of the 100*100 of the icons
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
                         }
@@ -164,8 +163,12 @@ class CanvasElement extends JPanel implements Serializable {
 
 
     private void rotate(){
-        rotationAngle = -Math.PI/2;
-        //setPreferredSize(new Dimension(icon.getIconHeight(), icon.getIconWidth()));
+        rotationAngle = rotationAngle - Math.PI/2;
+        int temp = width;
+        width = height;
+        height = temp;
+        setBounds(getX(), getY(), width, height);
+
         revalidate();
         repaint();
     }
@@ -173,7 +176,7 @@ class CanvasElement extends JPanel implements Serializable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d= (Graphics2D) g.create();
+        Graphics2D g2d = (Graphics2D) g.create();
         if (icon != null) {
                 int centerX = getWidth()/2;
                 int centerY = getHeight()/2;
@@ -185,11 +188,7 @@ class CanvasElement extends JPanel implements Serializable {
                 //icon.paintIcon(this, g, 0, 0);
         }
         else if (type.equals("Room")) {
-//            super.paintComponent(g);
             Room room = (Room) this;
-
-            //Graphics2D g2d = (Graphics2D) g;
-
             g2d.setColor(Room.getRoomColor(room.getRoomType()));
             g2d.fillRect(0, 0 , width, height);
 
