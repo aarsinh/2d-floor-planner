@@ -8,12 +8,20 @@ import java.util.Objects;
 class OverlapChecker{
 
     public static boolean roomOverlap(CanvasElement newElement, int x, int y, String type) {
-        Rectangle newBounds = new Rectangle(x, y, newElement.getWidth(), newElement.getHeight());
-
+        Rectangle newBounds;
         Iterable<? extends CanvasElement> elementsToCheck = type.equals("Room") ? CanvasElement.rooms : CanvasElement.elements;
         for (CanvasElement e : elementsToCheck) {
-            if (e != newElement && e.getBounds().intersects(newBounds)) {
-                return true;
+            if (type.equals("Room") && e.getType().equals("Room")) {
+                newBounds = new Rectangle(x + 5, y + 5, newElement.getWidth() - 10, newElement.getHeight() - 10);
+                Rectangle existingBounds = new Rectangle(e.getX() + 5, e.getY() + 5, e.getWidth() - 10, e.getHeight() - 10);
+                if (e != newElement && existingBounds.intersects(newBounds)) {
+                    return true;
+                }
+            } else {
+                newBounds = new Rectangle(x, y, newElement.getWidth(), newElement.getHeight());
+                if (e != newElement && e.getBounds().intersects(newBounds)) {
+                    return true;
+                }
             }
         }
         return false;
