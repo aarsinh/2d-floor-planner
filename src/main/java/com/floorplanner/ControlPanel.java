@@ -21,6 +21,8 @@ public class ControlPanel extends JPanel {
 
     static {
         iconToBounds.put("Room", new int[]{100,100});
+        iconToBounds.put("Door", new int[]{60, 60});
+        iconToBounds.put("Window", new int[]{60, 60});
         iconToBounds.put("Table", new int[]{54, 31});
         iconToBounds.put("Single Bed", new int[]{29, 54});
         iconToBounds.put("Double Bed", new int[]{46, 55});
@@ -40,7 +42,7 @@ public class ControlPanel extends JPanel {
     }
 
     public String[] essentials = new String[]{"Room", "Door", "Window"};
-    public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/room-icon.png"};
+    public String[] essentialsLogos = new String[]{"src/main/resources/room-icon.png", "src/main/resources/door-symbol.png", "src/main/resources/window.png"};
 
     public String[] furniture = new String[]{
             "Table", "Single Bed", "Double Bed",

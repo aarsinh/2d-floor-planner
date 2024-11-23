@@ -30,8 +30,8 @@ class CanvasElement extends JPanel implements Serializable {
 
     static {
         typeToIconPath.put("Room", null);
-        typeToIconPath.put("Door", "src/main/resources/door-symbol.png");
-        typeToIconPath.put("Window", "src/main/resources/window.png");
+        typeToIconPath.put("Door", null);
+        typeToIconPath.put("Window", null);
         typeToIconPath.put("Table", "src/main/resources/table.png");
         typeToIconPath.put("Single Bed", "src/main/resources/single-bed.png");
         typeToIconPath.put("Double Bed", "src/main/resources/double-bed.png");
@@ -100,6 +100,13 @@ class CanvasElement extends JPanel implements Serializable {
                             "Overlapping Objects",
                             JOptionPane.WARNING_MESSAGE);
                     setLocation(startX, startY);
+                    if(CanvasElement.this.type.equals("Room")) {
+                        for(CanvasElement el: elements) {
+                            if (CanvasElement.this.getBounds().contains(el.getBounds())) {
+                                el.setLocation(el.startX, el.startY);
+                            }
+                        }
+                    }
                 } else {
                     startX = getX();
                     startY = getY();
@@ -130,6 +137,7 @@ class CanvasElement extends JPanel implements Serializable {
                     // if a room is being dragged, then every element which is inside the room moves by the delta values
                     if (CanvasElement.this.type.equals("Room")) {
                         for (CanvasElement el : elements) {
+                            el.isDragging = true;
                             if (CanvasElement.this.getBounds().contains(el.getBounds())) {
                                 el.setLocation(el.getX() + deltaX, el.getY() + deltaY);
                             }
